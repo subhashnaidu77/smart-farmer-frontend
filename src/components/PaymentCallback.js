@@ -40,7 +40,7 @@ function PaymentCallback() {
 
                 try {
                     // Call our backend to verify the payment
-                    await apiClient.get(`http://localhost:4000/payment/verify/${reference}`);
+                    await apiClient.get(`/payment/verify/${reference}`);
                     setStatus('Payment successful! Your wallet has been updated. Redirecting...');
                 } catch (error) {
                     console.error("Payment verification failed:", error);

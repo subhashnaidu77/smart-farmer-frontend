@@ -10,7 +10,7 @@ function TransactionManagement() {
         const fetchTransactions = async () => {
             setLoading(true);
             try {
-                const response = await apiClient.get('http://localhost:4000/admin/transactions');
+                const response = await apiClient.get('/admin/transactions');
                 setTransactions(response.data);
             } catch (err) {
                 setError('Failed to fetch transactions.');

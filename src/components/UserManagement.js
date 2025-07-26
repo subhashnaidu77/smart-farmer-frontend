@@ -10,7 +10,7 @@ function UserManagement() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await apiClient.get('http://localhost:4000/admin/users');
+            const response = await apiClient.get('/admin/users');
             setUsers(response.data);
             setError('');
         } catch (err) {
@@ -29,7 +29,7 @@ function UserManagement() {
         const newRole = currentRole === 'admin' ? 'user' : 'admin';
         if (!window.confirm(`Are you sure you want to change ${email}'s role to ${newRole}?`)) return;
         try {
-            await apiClient.post('http://localhost:4000/admin/users/setrole', { uid, role: newRole });
+            await apiClient.post('/admin/users/setrole', { uid, role: newRole });
             alert('User role updated successfully!');
             fetchUsers();
         } catch (error) {
@@ -41,7 +41,7 @@ function UserManagement() {
     const handleDeleteUser = async (uid, email) => {
         if (!window.confirm(`Are you sure you want to PERMANENTLY delete the user ${email}? This cannot be undone.`)) return;
         try {
-            await apiClient.delete(`http://localhost:4000/admin/users/${uid}`);
+            await apiClient.delete(`/admin/users/${uid}`);
             alert('User deleted successfully!');
             fetchUsers();
         } catch (error) {

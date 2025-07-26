@@ -10,7 +10,7 @@ function SystemActions() {
         setLoading(true);
         setMessage('');
         try {
-            const response = await apiClient.post('http://localhost:4000/system/process-payouts');
+            const response = await apiClient.post('/system/process-payouts');
             setMessage(response.data.message);
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred.');

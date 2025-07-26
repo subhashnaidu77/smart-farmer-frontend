@@ -10,7 +10,7 @@ function WithdrawalManagement() {
     const fetchWithdrawals = async () => {
         setLoading(true);
         try {
-            const response = await apiClient.get('http://localhost:4000/admin/withdrawals');
+            const response = await apiClient.get('/admin/withdrawals');
             setWithdrawals(response.data);
         } catch (err) {
             setError('Failed to fetch withdrawal requests.');
@@ -27,7 +27,7 @@ function WithdrawalManagement() {
     const handleUpdateStatus = async (id, status) => {
         if (!window.confirm(`Are you sure you want to mark this request as '${status}'?`)) return;
         try {
-            await apiClient.post('http://localhost:4000/admin/withdrawals/update', { id, status });
+            await apiClient.post('/admin/withdrawals/update', { id, status });
             alert(`Request successfully marked as ${status}.`);
             fetchWithdrawals(); // Refresh the list
         } catch (error) {

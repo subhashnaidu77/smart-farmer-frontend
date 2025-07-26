@@ -44,7 +44,7 @@ function Dashboard({ handleLogout, userData }) {
         if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) return alert("Please enter a valid amount.");
         const amount = Number(amountStr);
         try {
-            const response = await apiClient.post('http://localhost:4000/payment/initialize', {
+            const response = await apiClient.post('/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
             });
