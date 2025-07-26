@@ -4,7 +4,7 @@ import { auth, db } from '../firebase';
 import { doc, getDoc, collection, getDocs, query, where, orderBy, addDoc, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
 import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle, FiGrid, FiSearch } from 'react-icons/fi';
 import EmailVerificationBanner from './EmailVerificationBanner';
-import axios from 'axios';
+import apiClient from '../axiosConfig';
 
 const ProgressBar = ({ current, target }) => {
     const percentage = target > 0 ? (current / target) * 100 : 0;
@@ -44,7 +44,7 @@ function Dashboard({ handleLogout, userData }) {
         if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) return alert("Please enter a valid amount.");
         const amount = Number(amountStr);
         try {
-            const response = await axios.post('http://localhost:4000/payment/initialize', {
+            const response = await apiClient.post('http://localhost:4000/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
             });

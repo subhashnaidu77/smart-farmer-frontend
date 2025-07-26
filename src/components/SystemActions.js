@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import apiClient from '../axiosConfig'; 
 
 function SystemActions() {
     const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ function SystemActions() {
         setLoading(true);
         setMessage('');
         try {
-            const response = await axios.post('http://localhost:4000/system/process-payouts');
+            const response = await apiClient.post('http://localhost:4000/system/process-payouts');
             setMessage(response.data.message);
         } catch (error) {
             setMessage(error.response?.data?.message || 'An error occurred.');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../axiosConfig'; 
 
 const styles = {
     container: {
@@ -40,7 +40,7 @@ function PaymentCallback() {
 
                 try {
                     // Call our backend to verify the payment
-                    await axios.get(`http://localhost:4000/payment/verify/${reference}`);
+                    await apiClient.get(`http://localhost:4000/payment/verify/${reference}`);
                     setStatus('Payment successful! Your wallet has been updated. Redirecting...');
                 } catch (error) {
                     console.error("Payment verification failed:", error);
