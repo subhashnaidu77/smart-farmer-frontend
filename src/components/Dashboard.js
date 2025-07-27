@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
-import { doc, getDoc, collection, getDocs, query, where, orderBy, addDoc, serverTimestamp, updateDoc, increment } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle, FiGrid, FiSearch } from 'react-icons/fi';
 import EmailVerificationBanner from './EmailVerificationBanner';
 import apiClient from '../axiosConfig';
@@ -11,7 +11,6 @@ const ProgressBar = ({ current, target }) => {
     return ( <div className="progress-bar-container"><div className="progress-bar-filled" style={{ width: `${percentage}%` }}></div></div> );
 };
 
-// We receive handleLogout and userData as props here
 function Dashboard({ handleLogout, userData }) {
     const currentUser = auth.currentUser;
     const [projects, setProjects] = useState([]);
@@ -39,20 +38,23 @@ function Dashboard({ handleLogout, userData }) {
     }, [currentUser]);
 
     const handleAddMoney = async () => {
-        if (!currentUser) return alert("Please log in to add money.");
-        const amountStr = prompt("Please enter the amount you want to deposit:", "1000");
+        if (!currentUser) return alert("Please log in.");
+        const amountStr = prompt("Enter amount:", "1000");
         if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) return alert("Please enter a valid amount.");
         const amount = Number(amountStr);
+
         try {
+            // We now send the correct callback URL to the backend
             const response = await apiClient.post('/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
+                // This will be https://...vercel.app on the live site
+                callbackUrl: `${window.location.origin}/payment/callback` 
             });
-            const { authorization_url } = response.data.data;
-            window.location.href = authorization_url;
+            window.location.href = response.data.data.authorization_url;
         } catch (error) {
             console.error("Error initializing payment:", error);
-            alert("Failed to start payment. Please ensure the backend is running.");
+            alert("Failed to start payment.");
         }
     };
 
@@ -78,7 +80,6 @@ function Dashboard({ handleLogout, userData }) {
                         <Link to="/admin" className="btn btn-admin"><FiGrid /> Admin Panel</Link>
                     )}
                     <Link to="/settings" className="btn btn-secondary"><FiSettings /> Settings</Link>
-                    {/* The onClick here uses the handleLogout function passed from App.js */}
                     <button onClick={handleLogout} className="btn btn-danger"><FiLogOut /> Logout</button>
                 </div>
             </header>
@@ -105,7 +106,6 @@ function Dashboard({ handleLogout, userData }) {
                         <Link to={`/project/${project.id}`} key={project.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                            <div className="card project-card-hover">
                                 <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '15px' }}>
-                                    {/* <img src={project.imageUrl} alt={project.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} /> */}
                                     <div style={{ flex: 1 }}>
                                         <h4 style={{ margin: 0 }}>{project.name}</h4>
                                         <p style={{ fontSize: '14px', margin: '4px 0 0', color: 'var(--text-secondary)' }}>Risk Level: <b>{project.riskLevel}</b></p>
