@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { auth, db } from '../firebase';
-import { doc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { FiCreditCard } from 'react-icons/fi';
 
-function WithdrawalPage({ userData, refreshUserData }) {
+function WithdrawalPage({ userData }) {
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ message: '', type: '' });
@@ -37,7 +37,7 @@ function WithdrawalPage({ userData, refreshUserData }) {
                 userId: currentUser.uid,
                 email: currentUser.email,
                 amount: withdrawalAmount,
-                status: 'pending', // All new requests are pending approval
+                status: 'pending',
                 createdAt: serverTimestamp(),
                 bankDetails: userData.withdrawalSettings
             });
@@ -58,28 +58,14 @@ function WithdrawalPage({ userData, refreshUserData }) {
             <div className="card">
                 <div className="form-group">
                     <label>Your Current Wallet Balance</label>
-                    <p className="wallet-balance-display">₹{userData?.walletBalance?.toLocaleString() || 0}</p>
+                    <p className="wallet-balance-display">₦{userData?.walletBalance?.toLocaleString() || 0}</p>
                 </div>
-
                 <form onSubmit={handleWithdrawalRequest}>
                     <div className="form-group">
-                        <label htmlFor="amount">Amount to Withdraw (₹)</label>
-                        <input
-                            id="amount"
-                            type="number"
-                            placeholder="e.g., 5000"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            required
-                        />
+                        <label htmlFor="amount">Amount to Withdraw (₦)</label>
+                        <input id="amount" type="number" placeholder="e.g., 5000" value={amount} onChange={(e) => setAmount(e.target.value)} required />
                     </div>
-
-                    {status.message && (
-                        <div className={`status-box ${status.type}`}>
-                            {status.message}
-                        </div>
-                    )}
-
+                    {status.message && (<div className={`status-box ${status.type}`}>{status.message}</div>)}
                     <button type="submit" className="btn btn-primary" style={{width: '100%', marginTop: '10px'}} disabled={loading}>
                         <FiCreditCard /> {loading ? 'Submitting...' : 'Request Withdrawal'}
                     </button>
@@ -88,5 +74,4 @@ function WithdrawalPage({ userData, refreshUserData }) {
         </div>
     );
 }
-
 export default WithdrawalPage;

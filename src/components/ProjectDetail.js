@@ -60,50 +60,27 @@ function ProjectDetail() {
             setStatusMessage({ text: 'Insufficient wallet balance for this number of units.', type: 'error' });
             return;
         }
-
         setInvesting(true);
-        setStatusMessage({ text: 'Processing investment...', type: 'info' });
-
+        setStatusMessage({ text: 'Processing...', type: 'info' });
         try {
             await runTransaction(db, async (transaction) => {
                 const projectRef = doc(db, 'projects', projectId);
                 const userRef = doc(db, 'users', currentUser.uid);
                 const projectDoc = await transaction.get(projectRef);
                 const userDoc = await transaction.get(userRef);
-
                 if (!projectDoc.exists() || !userDoc.exists()) throw new Error("Document not found");
-
                 const newProjectAmount = projectDoc.data().currentAmount + investmentAmount;
                 const newUserBalance = userDoc.data().walletBalance - investmentAmount;
                 const newAvailableUnits = projectDoc.data().availableUnits - numberOfUnits;
-
                 if (newUserBalance < 0) throw new Error("Insufficient funds.");
-                if (newAvailableUnits < 0) throw new Error("Units are no longer available.");
-
+                if (newAvailableUnits < 0) throw new Error("Units no longer available.");
                 transaction.update(projectRef, { currentAmount: newProjectAmount, availableUnits: newAvailableUnits });
                 transaction.update(userRef, { walletBalance: newUserBalance });
-
                 const newInvestmentRef = doc(collection(db, "investments"));
-                transaction.set(newInvestmentRef, { 
-                    projectId, 
-                    userId: currentUser.uid, 
-                    amount: investmentAmount, 
-                    units: numberOfUnits, 
-                    createdAt: serverTimestamp(), // Use serverTimestamp for accuracy
-                    status: 'active' // Set the initial status
-                });
-                
+                transaction.set(newInvestmentRef, { projectId, userId: currentUser.uid, amount: investmentAmount, units: numberOfUnits, createdAt: serverTimestamp(), status: 'active' });
                 const newTransactionRef = doc(collection(db, "transactions"));
-                transaction.set(newTransactionRef, { 
-                    userId: currentUser.uid, 
-                    type: 'Investment', 
-                    amount: investmentAmount, 
-                    status: 'Completed', 
-                    createdAt: serverTimestamp(), 
-                    details: `${numberOfUnits} units in ${projectDoc.data().name}` 
-                });
+                transaction.set(newTransactionRef, { userId: currentUser.uid, type: 'Investment', amount: investmentAmount, status: 'Completed', createdAt: serverTimestamp(), details: `${numberOfUnits} units in ${projectDoc.data().name}` });
             });
-
             setProject(prev => ({ ...prev, currentAmount: prev.currentAmount + investmentAmount, availableUnits: prev.availableUnits - numberOfUnits }));
             setWalletBalance(prev => prev - investmentAmount);
             setUnits('');
@@ -124,9 +101,8 @@ function ProjectDetail() {
 
     return (
         <div className="page-container project-detail-page">
-            <Link to="/dashboard" className="back-link"><FiArrowLeft /> Back to Dashboard</Link>
+            <Link to="/invest" className="back-link"><FiArrowLeft /> Back to Investments</Link>
             <div className="project-detail-header">
-                {/* <div className="header-image-container">{project.imageUrl && <img src={project.imageUrl} alt={project.name} />}</div> */}
                 <div className="header-info">
                     <h1 className="project-title">{project.name}</h1>
                     <p className="project-description">{project.description}</p>
@@ -139,7 +115,7 @@ function ProjectDetail() {
                         <StatCard icon={<FiTrendingUp />} label="Expected Return" value={`${project.returnPercentage}%`} />
                         <StatCard icon={<FiClock />} label="Duration" value={`${project.durationDays} Days`} />
                         <StatCard icon={<FiPackage />} label="Available Units" value={project.availableUnits?.toLocaleString()} />
-                        <StatCard icon={<FiDollarSign />} label="Price Per Unit" value={`₹${project.pricePerUnit?.toLocaleString()}`} />
+                        <StatCard icon={<FiDollarSign />} label="Price Per Unit" value={`₦${project.pricePerUnit?.toLocaleString()}`} />
                     </div>
                 </div>
                 <aside className="project-action-card card">
@@ -148,7 +124,7 @@ function ProjectDetail() {
                         <div className="funding-text"><span>{fundingPercentage.toFixed(0)}% Funded</span><span><b>{project.availableUnits?.toLocaleString()}</b> units left</span></div>
                         <div className="progress-bar-container"><div className="progress-bar-filled" style={{ width: `${fundingPercentage}%` }}></div></div>
                     </div>
-                    <div className="form-group"><label>Your Wallet Balance</label><p className="wallet-balance-display">₹{walletBalance.toLocaleString()}</p></div>
+                    <div className="form-group"><label>Your Wallet Balance</label><p className="wallet-balance-display">₦{walletBalance.toLocaleString()}</p></div>
                     <div className="form-group">
                         <label htmlFor="units">Enter number of units</label>
                         <input id="units" type="number" placeholder="e.g., 10" value={units} onChange={(e) => setUnits(e.target.value)} />
@@ -161,5 +137,4 @@ function ProjectDetail() {
         </div>
     );
 }
-
 export default ProjectDetail;

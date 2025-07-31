@@ -6,11 +6,10 @@ import { FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi';
 function ProjectManagement() {
     const [projects, setProjects] = useState([]);
     const [formData, setFormData] = useState({
-        name: '', description: '', pricePerUnit: '', availableUnits: '', returnPercentage: '', durationDays: '', riskLevel: 'Low', imageUrl: ''
+        name: '', description: '', pricePerUnit: '', availableUnits: '', returnPercentage: '', durationDays: '', riskLevel: 'Low'
     });
     const [isEditing, setIsEditing] = useState(false);
     const [currentProjectId, setCurrentProjectId] = useState(null);
-
     const projectsCollectionRef = collection(db, 'projects');
 
     const getProjects = async () => {
@@ -41,7 +40,7 @@ function ProjectManagement() {
             returnPercentage: Number(formData.returnPercentage),
             durationDays: Number(formData.durationDays),
             riskLevel: formData.riskLevel,
-            // imageUrl: formData.imageUrl,
+            imageUrl: '',
             targetAmount: Number(formData.pricePerUnit) * Number(formData.availableUnits)
         };
 
@@ -61,7 +60,7 @@ function ProjectManagement() {
     };
 
     const handleDeleteProject = async (id) => {
-        if (window.confirm("Are you sure you want to delete this project?")) {
+        if (window.confirm("Are you sure?")) {
             const projectDoc = doc(db, "projects", id);
             try { await deleteDoc(projectDoc); alert('Project deleted!'); getProjects(); } catch (err) { alert('Error: ' + err.message); }
         }
@@ -74,11 +73,10 @@ function ProjectManagement() {
             <h2 style={{fontWeight: 600, marginBottom: '20px'}}>{isEditing ? 'Edit Project' : 'Add New Project'}</h2>
             <form onSubmit={handleFormSubmit}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginBottom: '20px' }}>
-                    <div className="form-group" style={{gridColumn: '1 / 3'}}><label>Project Name</label><input name="name" value={formData.name} onChange={handleInputChange} required /></div>
-                    {/* <div className="form-group"><label>Image URL</label><input name="imageUrl" value={formData.imageUrl} onChange={handleInputChange} required /></div> */}
-                    <div className="form-group"><label>Price Per Unit (₹)</label><input type="number" name="pricePerUnit" value={formData.pricePerUnit} onChange={handleInputChange} required /></div>
+                    <div className="form-group" style={{gridColumn: '1 / -1'}}><label>Project Name</label><input name="name" value={formData.name} onChange={handleInputChange} required /></div>
+                    <div className="form-group"><label>Price Per Unit (₦)</label><input type="number" name="pricePerUnit" value={formData.pricePerUnit} onChange={handleInputChange} required /></div>
                     <div className="form-group"><label>Available Units</label><input type="number" name="availableUnits" value={formData.availableUnits} onChange={handleInputChange} required /></div>
-                    <div className="form-group"><label>Calculated Target</label><input type="text" value={`₹${calculatedTarget.toLocaleString()}`} readOnly disabled /></div>
+                    <div className="form-group"><label>Calculated Target</label><input type="text" value={`₦${calculatedTarget.toLocaleString()}`} readOnly disabled /></div>
                     <div className="form-group"><label>Return (%)</label><input type="number" name="returnPercentage" value={formData.returnPercentage} onChange={handleInputChange} required /></div>
                     <div className="form-group"><label>Duration (Days)</label><input type="number" name="durationDays" value={formData.durationDays} onChange={handleInputChange} required /></div>
                     <div className="form-group"><label>Risk Level</label>
@@ -91,16 +89,13 @@ function ProjectManagement() {
                     <div className="form-group" style={{gridColumn: '1 / -1'}}><label>Description</label><textarea name="description" value={formData.description} onChange={handleInputChange} required rows="3"></textarea></div>
                 </div>
                 <div style={{display: 'flex', gap: '10px'}}>
-                    <button type="submit" className="btn btn-primary">
-                        {isEditing ? <><FiEdit /> Update Project</> : <><FiPlus /> Add Project</>}
-                    </button>
+                    <button type="submit" className="btn btn-primary">{isEditing ? <><FiEdit /> Update Project</> : <><FiPlus /> Add Project</>}</button>
                     {isEditing && <button type="button" onClick={clearForm} className="btn btn-secondary">Cancel Edit</button>}
                 </div>
             </form>
 
             <h2 style={{fontWeight: 600, marginTop: '40px', borderTop: '1px solid var(--border-color)', paddingTop: '30px'}}>Existing Projects</h2>
             <table className="admin-table">
-                {/* --- THIS IS THE CORRECT TABLE CODE --- */}
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -114,9 +109,9 @@ function ProjectManagement() {
                     {projects.map(project => (
                         <tr key={project.id}>
                             <td>{project.name}</td>
-                            <td>₹{project.pricePerUnit?.toLocaleString()}</td>
+                            <td>₦{project.pricePerUnit?.toLocaleString()}</td>
                             <td>{project.availableUnits?.toLocaleString()}</td>
-                            <td>₹{project.targetAmount?.toLocaleString()}</td>
+                            <td>₦{project.targetAmount?.toLocaleString()}</td>
                             <td>
                                 <button onClick={() => handleEditClick(project)} className="btn-icon btn-edit"><FiEdit /></button>
                                 <button onClick={() => handleDeleteProject(project.id)} className="btn-icon btn-delete"><FiTrash2 /></button>
@@ -128,5 +123,4 @@ function ProjectManagement() {
         </div>
     );
 }
-
 export default ProjectManagement;

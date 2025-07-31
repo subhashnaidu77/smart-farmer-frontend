@@ -35,41 +35,27 @@ function ROICalculator({ units, project }) {
     if (!project || !units || parseFloat(units) <= 0) {
         return (
             <div style={styles.card}>
-                <h3 style={styles.title}>Return on Investment Calculator</h3>
-                <p style={{fontSize: '14px', color: 'var(--text-secondary)'}}>Enter the number of units to see your potential return.</p>
+                <h3 style={styles.title}>Return Calculator</h3>
+                <p style={{fontSize: '14px', color: 'var(--text-secondary)'}}>Enter units to see your potential return.</p>
             </div>
         );
     }
 
     const { pricePerUnit, returnPercentage, durationDays } = project;
     const investmentAmount = parseFloat(units) * pricePerUnit;
-    const totalReturnDecimal = (returnPercentage / 100);
-    const profitAmount = investmentAmount * totalReturnDecimal;
+    const profitAmount = investmentAmount * (returnPercentage / 100);
     const totalReturnAmount = investmentAmount + profitAmount;
     
     return (
         <div style={styles.card}>
-            <h3 style={styles.title}>Return on Investment Calculator</h3>
+            <h3 style={styles.title}>Return Calculator</h3>
             <div style={styles.grid}>
-                <div>
-                    <p style={styles.itemLabel}>Investment Amount</p>
-                    <p style={styles.itemValue}>₹{investmentAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                </div>
-                <div>
-                    <p style={styles.itemLabel}>Expected Profit</p>
-                    <p style={styles.itemValue}>₹{profitAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                </div>
-                <div>
-                    <p style={styles.itemLabel}>Duration</p>
-                    <p style={{...styles.itemValue, color: 'var(--text-color)'}}>{durationDays} days</p>
-                </div>
-                <div>
-                    <p style={styles.itemLabel}>Expected Total Payout</p>
-                    <p style={styles.itemValue}>₹{totalReturnAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                </div>
+                <div><p style={styles.itemLabel}>Investment</p><p style={styles.itemValue}>₦{investmentAmount.toLocaleString()}</p></div>
+                <div><p style={styles.itemLabel}>Expected Profit</p><p style={styles.itemValue}>₦{profitAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+                <div><p style={styles.itemLabel}>Duration</p><p style={{...styles.itemValue, color: 'var(--text-color)'}}>{durationDays} days</p></div>
+                <div><p style={styles.itemLabel}>Total Payout</p><p style={styles.itemValue}>₦{totalReturnAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             </div>
         </div>
     );
 }
-
 export default ROICalculator;
