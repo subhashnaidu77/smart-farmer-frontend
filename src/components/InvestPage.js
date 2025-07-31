@@ -35,10 +35,18 @@ function InvestPage() {
                 const investmentsSnapshot = await getDocs(investmentsQuery);
                 const userInvestments = investmentsSnapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
                 
-                const myInvestmentsWithDetails = userInvestments.map(investment => {
-                    const projectDetails = projectsList.find(p => p.id === investment.projectId);
-                    return { ...investment, ...projectDetails };
-                });
+                const myInvestmentsWithDetails = userInvestments
+                    .map(investment => {
+                        const projectDetails = projectsList.find(p => p.id === investment.projectId);
+                        // If projectDetails are found, combine them
+                        if (projectDetails) {
+                            return { ...investment, ...projectDetails };
+                        }
+                        // If the project was deleted, return null
+                        return null;
+                    })
+                    .filter(Boolean); // This line removes any null entries
+
                 setMyInvestments(myInvestmentsWithDetails);
             }
             setLoading(false);
@@ -46,14 +54,14 @@ function InvestPage() {
         fetchData();
     }, [currentUser]);
 
-    const filteredProjects = activeTab === 'all' 
-        ? allProjects.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-        : myInvestments.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredProjects = (activeTab === 'all' ? allProjects : myInvestments).filter(project =>
+        project && project.name && project.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const renderContent = () => {
         if (loading) return <p>Loading...</p>;
 
-        const projectsToDisplay = activeTab === 'all' ? filteredProjects : myInvestments;
+        const projectsToDisplay = filteredProjects;
 
         if (projectsToDisplay.length === 0) {
             return (
@@ -72,9 +80,11 @@ function InvestPage() {
                             <div className="project-card-header">
                                 <div className="project-card-info">
                                     <h4 className="project-card-title">{project.name}</h4>
-                                    <p className="project-card-subtitle">Risk Level: <b>{project.riskLevel}</b></p>
+                                    <p className="project-card-subtitle">
+                                        {activeTab === 'my' ? `You Invested: ₦${project.amount.toLocaleString()}` : `Risk Level: ${project.riskLevel}`}
+                                    </p>
                                 </div>
-                                {activeTab === 'my' && <CircularProgress percentage={(project.currentAmount / project.targetAmount) * 100} />}
+                                <CircularProgress percentage={(project.currentAmount / project.targetAmount) * 100} />
                             </div>
                             <div className="project-card-stats">
                                 <span><FiTrendingUp className="accent-icon" /> {project.returnPercentage}% Return</span>

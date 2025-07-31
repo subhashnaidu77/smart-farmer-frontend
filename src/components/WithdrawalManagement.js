@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import apiClient from '../axiosConfig'; 
+import apiClient from '../axiosConfig'; // Use the live URL config
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
 
 function WithdrawalManagement() {
@@ -10,6 +10,7 @@ function WithdrawalManagement() {
     const fetchWithdrawals = async () => {
         setLoading(true);
         try {
+            // Use apiClient to call the live backend
             const response = await apiClient.get('/admin/withdrawals');
             setWithdrawals(response.data);
         } catch (err) {
@@ -27,6 +28,7 @@ function WithdrawalManagement() {
     const handleUpdateStatus = async (id, status) => {
         if (!window.confirm(`Are you sure you want to mark this request as '${status}'?`)) return;
         try {
+            // Use apiClient to call the live backend
             await apiClient.post('/admin/withdrawals/update', { id, status });
             alert(`Request successfully marked as ${status}.`);
             fetchWithdrawals(); // Refresh the list
@@ -56,8 +58,8 @@ function WithdrawalManagement() {
                     {withdrawals.map(req => (
                         <tr key={req.id}>
                             <td>{req.email}</td>
-                            <td>₹{req.amount.toLocaleString()}</td>
-                            <td>{req.bankDetails?.bankName} - {req.bankDetails?.accountNumber}</td>
+                            <td>₦{req.amount.toLocaleString()}</td>
+                            <td>{req.bankDetails.bankName} - {req.bankDetails.accountNumber}</td>
                             <td>{req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleString() : 'N/A'}</td>
                             <td><span className={`role-badge ${req.status}`}>{req.status}</span></td>
                             <td>

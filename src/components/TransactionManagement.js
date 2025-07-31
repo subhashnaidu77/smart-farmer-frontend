@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import apiClient from '../axiosConfig';
+import apiClient from '../axiosConfig'; // Use the live URL config
 
 function TransactionManagement() {
     const [transactions, setTransactions] = useState([]);
@@ -10,6 +10,7 @@ function TransactionManagement() {
         const fetchTransactions = async () => {
             setLoading(true);
             try {
+                // Use apiClient to call the live backend
                 const response = await apiClient.get('/admin/transactions');
                 setTransactions(response.data);
             } catch (err) {
@@ -44,7 +45,7 @@ function TransactionManagement() {
                         <tr key={tx.id}>
                             <td>{tx.email}</td>
                             <td><span className={`role-badge ${tx.type?.toLowerCase()}`}>{tx.type}</span></td>
-                            <td>₹{tx.amount.toLocaleString()}</td>
+                            <td>₦{tx.amount.toLocaleString()}</td>
                             <td>{tx.details}</td>
                             <td>{tx.createdAt ? new Date(tx.createdAt.seconds * 1000).toLocaleString() : 'N/A'}</td>
                             <td><span className={`role-badge ${tx.status?.toLowerCase()}`}>{tx.status}</span></td>
