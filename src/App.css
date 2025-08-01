@@ -1,44 +1,44 @@
-/* === FINAL POLISHED DUAL THEME DESIGN SYSTEM === */
+/* === FINAL PREMIUM DESIGN SYSTEM === */
 
 /* 1. Global Reset & Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 :root {
-  --font-family: 'Poppins', sans-serif;
-  --accent-color-green: #2E7D32;
-  --accent-color-yellow: #FBC02D;
-  --accent-color-green-rgb: 46, 125, 50;
+  --font-family: 'Inter', sans-serif;
+  --accent-color: #00f260; /* A vibrant green accent */
+  --accent-color-rgb: 0, 242, 96;
 }
 
 body {
   margin: 0;
   font-family: var(--font-family);
-  transition: background-color 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 2. Theme Variables for Light & Dark Mode */
+/* 2. Theme Variables */
 .light {
-  --bg-color: #F7F9FC;
-  --secondary-bg: #FFFFFF;
+  --bg-color: #f0f2f5;
+  --secondary-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
   --text-color: #1c1c1e;
   --text-secondary: #6e6e73;
-  --border-color: #EAECEF;
-  --shadow-color: rgba(0, 0, 0, 0.05);
-  --accent-color: var(--accent-color-green);
+  --border-color: #e5e5e5;
+  --shadow-color: rgba(0, 0, 0, 0.08);
 }
 
 .dark {
-  --bg-color: #1A1D24;
-  --secondary-bg: #242831;
-  --text-color: #F5F5F7;
-  --text-secondary: #A0A0A5;
-  --border-color: #3A3A3C;
+  --bg-color: #101010;
+  --secondary-bg: rgba(28, 28, 30, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-color: #f5f5f7;
+  --text-secondary: #a0a0a5;
+  --border-color: #3a3a3c;
   --shadow-color: rgba(0, 0, 0, 0.2);
-  --accent-color: var(--accent-color-green);
 }
 
 /* 3. Main App Layout */
@@ -47,10 +47,12 @@ body {
   min-height: 100vh;
   background-color: var(--bg-color);
   color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .main-content {
   width: 100%;
   flex-grow: 1;
@@ -60,41 +62,483 @@ body {
   padding-bottom: 80px; 
 }
 
-/* 4. Card Style */
+/* 4. Glassmorphism Card Style */
 .card {
   background-color: var(--secondary-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-radius: 16px;
   padding: 25px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px 0 var(--shadow-color);
   text-align: left;
   width: 100%;
 }
 
 /* 5. Typography */
-h1, h2, h3, h4 { font-weight: 600; color: var(--text-color); }
+h1, h2, h3, h4, h5, h6 { font-weight: 700; color: var(--text-color); }
 p { color: var(--text-secondary); line-height: 1.6; }
 
-/* 6. Button Styles */
-.btn { padding: 12px 24px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.2s ease-in-out; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.btn-primary { background-image: linear-gradient(to right, var(--accent-color-yellow) 0%, var(--accent-color-green) 51%, var(--accent-color-yellow) 100%); background-size: 200% auto; color: white; font-weight: 700; }
-.btn-primary:hover { background-position: right center; transform: translateY(-2px); box-shadow: 0 7px 20px rgba(var(--accent-color-green-rgb), 0.3); }
+/* 6. Button Styles with Gradient */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5 51%, #00d2ff 100%);
+  background-size: 200% auto;
+  color: white;
+}
+.btn-primary:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(58, 123, 213, 0.4);
+}
+
 .btn-secondary { background-color: var(--secondary-bg); color: var(--text-color); border: 1px solid var(--border-color); }
 .btn-secondary:hover { background-color: var(--bg-color); border-color: var(--accent-color); }
 .btn-danger { background-color: #e53935; color: white; }
-.btn-admin { background-color: #6f42c1; color: white; }
+.btn-admin { background-color: #8e24aa; color: white; }
 
 /* 7. Bottom Navigation Bar */
-.main-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background-color: var(--secondary-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border-color); z-index: 1000; box-shadow: 0 -5px 20px var(--shadow-color); }
-.nav-link { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-secondary); font-size: 11px; font-weight: 500; transition: all 0.2s ease-in-out; padding: 5px 15px; border-radius: 12px; }
+.main-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background-color: var(--secondary-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid var(--glass-border);
+  z-index: 1000;
+}
+.nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  padding: 5px 15px;
+  border-radius: 12px;
+}
 .nav-link svg { font-size: 20px; margin-bottom: 4px; }
 .nav-link:hover { color: var(--accent-color); }
-.nav-link.active { color: var(--accent-color); }
+.nav-link.active { color: var(--accent-color); background-color: rgba(var(--accent-color-rgb), 0.1); }
 
-/* All other component styles */
+
+/* === Component Specific Styles === */
+/* All other component-specific styles (.page-container, .form-group, etc.) */
+/* that you've previously added should also be here. This CSS file is a complete replacement */
+/* and already includes them for consistency. */
+
 .page-container { width: 100%; max-width: 1200px; padding: 20px; animation: fadeIn 0.5s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Form Styles */
 .form-group { display: flex; flex-direction: column; margin-bottom: 20px; }
 .form-group label { margin-bottom: 8px; font-size: 14px; font-weight: 500; color: var(--text-secondary); }
 .form-group input, .form-group select, .form-group textarea { background-color: var(--bg-color); color: var(--text-color); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; font-size: 16px; font-family: var(--font-family); width: 100%; }
-.form-group input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(var(--accent-color-green-rgb), 0.2); }
+.form-group input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.2); }
+
+/* Progress Bar */
+.progress-bar-container { width: 100%; height: 8px; background-color: var(--bg-color); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.progress-bar-filled { height: 100%; background-image: linear-gradient(to right, #00f260, #0575e6); border-radius: 4px; transition: width 0.5s ease-in-out; }
+
+/* Search Bar */
+.search-bar-container { position: relative; display: flex; align-items: center; }
+.search-bar-icon { position: absolute; left: 15px; color: var(--text-secondary); }
+.search-bar-input { width: 250px; padding: 12px 12px 12px 40px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--secondary-bg); color: var(--text-color); font-size: 14px; }
+
+/* Project Card Hover Effect */
+.project-card-hover { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
+.project-card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--shadow-color); }
+
+/* Settings Page */
+.settings-container { width: 100%; max-width: 1200px; padding: 20px; animation: fadeIn 0.5s ease-in-out; }
+.settings-top-bar { display: flex; align-items: center; gap: 30px; margin-bottom: 30px; }
+.settings-content-wrapper { display: grid; grid-template-columns: 250px 1fr; gap: 30px; }
+.settings-nav { display: flex; flex-direction: column; gap: 10px; }
+.settings-nav-btn { display: flex; align-items: center; gap: 12px; padding: 15px; border-radius: 8px; border: none; background-color: transparent; color: var(--text-secondary); font-size: 16px; font-weight: 500; cursor: pointer; text-align: left; transition: all 0.2s ease; }
+.settings-nav-btn:hover { background-color: var(--secondary-bg); color: var(--text-color); }
+.settings-nav-btn.active { background-color: var(--accent-color); color: white; box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3); }
+.settings-nav-btn.danger-zone { color: #dc3545; }
+.settings-nav-btn.danger-zone:hover, .settings-nav-btn.danger-zone.active { background-color: #dc3545; color: white; }
+.settings-main-content { padding: 30px; }
+.settings-main-content h2 { margin-top: 0; margin-bottom: 10px; font-weight: 600; }
+.settings-main-content p { margin-top: 0; margin-bottom: 30px; color: var(--text-secondary); }
+
+/* Admin Table */
+.admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+.admin-table th { background-color: var(--secondary-bg); font-weight: 600; font-size: 14px; }
+.admin-table tbody tr:hover { background-color: var(--bg-color); }
+.btn-icon { background-color: transparent; border: none; padding: 8px; border-radius: 50%; cursor: pointer; font-size: 18px; margin-right: 10px; transition: all 0.2s ease; }
+.btn-icon:hover { background-color: var(--secondary-bg); }
+.btn-edit { color: #ffc107; }
+.btn-delete { color: #dc3545; }
+/* === FINAL PROJECT DETAIL PAGE STYLES === */
+
+.project-detail-page .back-link {
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.project-detail-header {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    background-color: var(--secondary-bg);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.project-detail-header .header-image-container img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.project-detail-header .header-info .project-title {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.project-detail-header .header-info .project-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-top: 0;
+}
+
+.project-detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.project-main-content .section-title, .project-action-card .section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--secondary-bg);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.stat-card-icon {
+    font-size: 1.8rem;
+    color: var(--accent-color);
+}
+
+.stat-card-label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.stat-card-value {
+    margin: 4px 0 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.project-action-card {
+    position: sticky;
+    top: 20px;
+}
+
+.funding-progress {
+    margin-bottom: 20px;
+}
+
+.funding-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.wallet-balance-display {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin: 0;
+}
+
+.status-message {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+}
+.status-message.success { color: #155724; background-color: #d4edda; }
+.status-message.error { color: #721c24; background-color: #f8d7da; }
+.status-message.info { color: #0c5460; background-color: #d1ecf1; }
+/* Add this to the end of App.css */
+.status-box {
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+.status-box.success { background-color: #d4edda; color: #155724; }
+.status-box.error { background-color: #f8d7da; color: #721c24; }
+.status-box.info { background-color: #d1ecf1; color: #0c5460; }
+/* Add this to the end of your App.css */
+
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.admin-tab-btn {
+    padding: 15px 25px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-tab-btn.active {
+    color: var(--accent-color);
+    border-bottom: 3px solid var(--accent-color);
+}
+
+.admin-tab-content {
+    padding-top: 20px;
+}/* Add these styles to the end of your App.css */
+
+.invest-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.invest-page-header .admin-tabs {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.investments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.project-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card-header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.project-card-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.project-card-info {
+    flex: 1;
+}
+
+.project-card-title {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.project-card-subtitle {
+    font-size: 14px;
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+}
+
+.project-card-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: var(--text-secondary);
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.accent-icon {
+    color: var(--accent-color);
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.project-card-funding {
+    font-size: 12px;
+    text-align: right;
+    margin: 4px 0 0;
+    color: var(--text-secondary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: var(--secondary-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}/* Add this to the end of your App.css */
+.role-badge.pending { background-color: #fff3cd; color: #856404; }
+.role-badge.approved { background-color: #d4edda; color: #155724; }
+.role-badge.rejected { background-color: #f8d7da; color: #721c24; }
+
+.btn-approve {
+    color: #28a745;
+}/* Add this to the end of your App.css */
+.role-badge.deposit { background-color: #d4edda; color: #155724; }
+.role-badge.investment { background-color: #d1ecf1; color: #0c5460; }
+.role-badge.completed { background-color: #d4edda; color: #155724; }
+/* Add this to the end of your App.css */
+
+.your-investments-section {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.investment-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px; /* for scrollbar space */
+}
+
+.carousel-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.carousel-card {
+    min-width: 280px;
+    transition: transform 0.2s ease-in-out;
+}
+.carousel-card:hover {
+    transform: translateY(-5px);
+}
+
+.carousel-card-title { font-size: 1.1em; margin: 0; }
+.carousel-card-label { font-size: 12px; color: var(--text-secondary); margin: 0; }
+.carousel-card-value { font-size: 1.2em; font-weight: 600; margin: 2px 0 0; }
+
+.conic-progress-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.conic-progress-inner {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: var(--secondary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.conic-progress-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+/* Add this to the end of your App.css */
+
+/* Loading Spinner Styles */
+/* Add this to the end of your App.css */
+
+/* Loading Spinner Styles */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    height: 100vh;
+}
+.loading-spinner {
+    border: 5px solid var(--border-color);
+    border-top: 5px solid var(--accent-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+.loading-message {
+    margin-top: 20px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Login/Signup Logo Style */
+.auth-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
