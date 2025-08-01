@@ -4,6 +4,7 @@ import React from 'react';
 function LoadingSpinner({ message }) {
     return (
         <div className="loading-container">
+            <img src="/logo.png" alt="Smart Farmer Logo" className="loading-logo" />
             <div className="loading-spinner"></div>
             <p className="loading-message">{message || 'Loading...'}</p>
         </div>
