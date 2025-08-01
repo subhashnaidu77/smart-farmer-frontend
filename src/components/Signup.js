@@ -7,7 +7,7 @@ import { doc, setDoc } from 'firebase/firestore';
 function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [referralCode, setReferralCode] = useState(''); // State for referral code
+    const [referralCode, setReferralCode] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
@@ -18,11 +18,7 @@ function Signup() {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-
-            // Generate a unique 6-character referral code for the new user from their UID
             const newReferralCode = user.uid.substring(0, 6).toUpperCase();
-
-            // Store all user data in Firestore
             await setDoc(doc(db, "users", user.uid), {
                 email: user.email,
                 createdAt: new Date(),
@@ -33,10 +29,9 @@ function Signup() {
                 phone: '',
                 notificationPrefs: { activity: true, investment: true, promotions: false },
                 withdrawalSettings: { bankName: '', accountNumber: '', accountName: '' },
-                referralCode: newReferralCode, // The new user's own code
-                referredBy: referralCode,      // The code they used to sign up (if any)
+                referralCode: newReferralCode,
+                referredBy: referralCode,
             });
-
             setSuccess('Registration successful! Your account has been created.');
             setEmail('');
             setPassword('');
@@ -56,10 +51,11 @@ function Signup() {
     };
 
     return (
-        <div className="card" style={{ maxWidth: '450px', margin: '50px auto' }}>
+        <div className="card" style={{ maxWidth: '450px', margin: '50px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
             <h2 style={{textAlign: 'center', marginBottom: '20px'}}>Create an Account</h2>
-            {error && <p className="status-message error">{error}</p>}
-            {success && <p className="status-message success">{success}</p>}
+            {error && <p className="status-message error" style={{width: '100%'}}>{error}</p>}
+            {success && <p className="status-message success" style={{width: '100%'}}>{success}</p>}
             <form onSubmit={handleSignup} style={{width: '100%'}}>
                 <div className="form-group">
                     <label>Email Address</label>

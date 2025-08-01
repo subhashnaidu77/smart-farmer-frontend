@@ -26,29 +26,25 @@ function Login() {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-            <h2>Login</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleLogin}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
-                    <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }} />
+        <div className="card" style={{ maxWidth: '450px', margin: '50px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
+            <h2 style={{textAlign: 'center', marginBottom: '20px'}}>Welcome Back!</h2>
+            {error && <p className="status-message error" style={{width: '100%'}}>{error}</p>}
+            <form onSubmit={handleLogin} style={{width: '100%'}}>
+                <div className="form-group">
+                    <label>Email Address</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>Password:</label>
-                    <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }} />
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <div style={{ textAlign: 'right', fontSize: '12px', marginBottom: '15px' }}>
                     <Link to="/forgot-password">Forgot Password?</Link>
                 </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }}>
-                    Login
-                </button>
+                <button type="submit" className="btn btn-primary" style={{width: '100%'}}>Login</button>
             </form>
-            {/* LINK TO SIGNUP PAGE */}
-            <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px' }}>
-                Don't have an account? <Link to="/signup">Sign Up here</Link>
-            </p>
+            <p style={{ textAlign: 'center', marginTop: '20px' }}>Don't have an account? <Link to="/signup">Sign Up here</Link></p>
         </div>
     );
 }

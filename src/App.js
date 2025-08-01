@@ -17,12 +17,12 @@ import TransactionsPage from './components/TransactionsPage';
 import InvestPage from './components/InvestPage';
 import PaymentCallback from './components/PaymentCallback';
 import WithdrawalPage from './components/WithdrawalPage';
+import LoadingSpinner from './components/LoadingSpinner'; // Import the new spinner
 
 // Import Firebase services
-import { auth, db } from './firebase';
+import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   const { theme } = useTheme();
@@ -57,17 +57,17 @@ function App() {
     return () => unsubscribe();
   }, [fetchUserData]);
 
-  // This is the function that performs the logout
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setUserData(null); // Clear user data
+      setUserData(null);
     } catch (error) {
       console.error("Error logging out:", error.message);
     }
   };
   
- if (loading) {
+  // This is the updated loading section
+  if (loading) {
       return <LoadingSpinner message="Loading Application..." />;
   }
 
@@ -78,7 +78,6 @@ function App() {
           <Routes>
             {currentUser ? (
               <>
-                {/* We pass the handleLogout function to the Dashboard here */}
                 <Route path="/dashboard" element={<Dashboard handleLogout={handleLogout} userData={userData} />} />
                 <Route path="/invest" element={<InvestPage />} />
                 <Route path="/transactions" element={<TransactionsPage />} />
