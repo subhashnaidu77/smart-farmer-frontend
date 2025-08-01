@@ -6,11 +6,11 @@ import './Navigation.css';
 function Navigation() {
     return (
         <nav className="main-nav">
-            <NavLink to="/dashboard" className="nav-link nav-logo-link">
+            {/* <NavLink to="/dashboard" className="nav-link nav-logo-link">
                 <img src="/logo.png" alt="Smart Farmer Logo" className="nav-logo-img" />
                 <span>Smart Farmer</span>
-            </NavLink>
-            <div className="nav-actions">
+            </NavLink> */}
+            
             <NavLink to="/dashboard" className="nav-link">
                 <FiHome />
                 <span>Home</span>
@@ -27,7 +27,6 @@ function Navigation() {
                 <FiUser />
                 <span>Profile</span>
             </NavLink>
-            </div>
         </nav>
     );
 }
