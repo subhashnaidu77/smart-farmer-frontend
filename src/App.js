@@ -24,6 +24,7 @@ import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
+
 function App() {
   const { theme } = useTheme();
   const [currentUser, setCurrentUser] = useState(null);
