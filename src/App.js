@@ -22,6 +22,7 @@ import WithdrawalPage from './components/WithdrawalPage';
 import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   const { theme } = useTheme();
@@ -66,8 +67,8 @@ function App() {
     }
   };
   
-  if (loading) {
-      return <div style={{height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Loading Application...</div>;
+ if (loading) {
+      return <LoadingSpinner message="Loading Application..." />;
   }
 
   return (
