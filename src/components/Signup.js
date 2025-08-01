@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../firebase';
+import { auth, db } from '../firebase'; // CORRECTED PATH
 import { doc, setDoc } from 'firebase/firestore';
 
 function Signup() {

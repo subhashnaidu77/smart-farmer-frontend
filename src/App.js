@@ -20,7 +20,7 @@ import WithdrawalPage from './components/WithdrawalPage';
 import LoadingSpinner from './components/LoadingSpinner'; // Import the new spinner
 
 // Import Firebase services
-import { auth, db } from '../firebase';
+import { auth, db } from './firebase'; 
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
