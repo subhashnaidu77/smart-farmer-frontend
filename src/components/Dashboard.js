@@ -63,9 +63,12 @@ function Dashboard({ handleLogout, userData }) {
         <div className="page-container">
             {currentUser && !currentUser.emailVerified && <EmailVerificationBanner />}
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
                 <div>
                     <h1 style={{ margin: 0, fontWeight: 700 }}>Welcome, {userData?.firstName || userData?.email?.split('@')[0] || 'User'}!</h1>
                     <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)' }}>Let's make some green investments today.</p>
+                </div>
                 </div>
                 <div style={{ display: 'flex', gap: '15px' }}>
                     {userData && userData.role === 'admin' && (<Link to="/admin" className="btn btn-admin"><FiGrid /> Admin Panel</Link>)}
