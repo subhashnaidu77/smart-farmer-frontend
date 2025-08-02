@@ -514,15 +514,6 @@ p { color: var(--text-secondary); line-height: 1.6; }
 /* Add these styles to the end of your App.css */
 
 /* Enhanced Loading Spinner Styles */
-/* Enhanced Loading Spinner Styles */
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    height: 100vh; /* Make sure it takes the full viewport height */
-}
 .loading-logo {
     width: 120px;
     height: 120px;
@@ -549,6 +540,7 @@ p { color: var(--text-secondary); line-height: 1.6; }
         opacity: 1;
     }
 }
+
 /* Login/Signup Logo Style */
 /* Add this to the end of your App.css */
 
