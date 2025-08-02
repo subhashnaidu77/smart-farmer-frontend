@@ -13,10 +13,13 @@ function AdminDashboard() {
     return (
         <div className="page-container">
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                <div>
-                    <h1 style={{ margin: 0, fontWeight: 700 }}>Admin Panel</h1>
-                    <p style={{ margin: '4px '
-                    }}>Manage your platform data.</p>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    {/* --- LOGO ADDED HERE --- */}
+                    <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
+                    <div>
+                        <h1 style={{ margin: 0, fontWeight: 700 }}>Admin Panel</h1>
+                        <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)' }}>Manage your platform data.</p>
+                    </div>
                 </div>
                 <Link to="/dashboard" className="btn btn-secondary">
                     <FiArrowLeft /> Back to User Dashboard
