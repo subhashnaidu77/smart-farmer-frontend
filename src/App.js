@@ -179,7 +179,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className={`App dark`}>
+      <div className={`App ${theme}`}>
         {/* Render the top navigation only when a user is logged in */}
         {currentUser && <Navigation handleLogout={handleLogout} userData={userData} />}
 
