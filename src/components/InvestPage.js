@@ -101,17 +101,24 @@ function InvestPage() {
 
     return (
         <div className="page-container">
-            <div className="invest-page-header">
-                <div className="admin-tabs">
-                    <button className={`admin-tab-btn ${activeTab === 'all' ? 'active' : ''}`} onClick={() => setActiveTab('all')}>All Opportunities</button>
-                    <button className={`admin-tab-btn ${activeTab === 'my' ? 'active' : ''}`} onClick={() => setActiveTab('my')}>My Active Investments</button>
-                </div>
-                <div className="search-bar-container">
-                    <FiSearch className="search-bar-icon" />
-                    <input type="text" placeholder="Search..." className="search-bar-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                </div>
+   <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
+                <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
+                <h1 style={{ margin: 0 }}>Investments</h1>
             </div>
-            {renderContent()}
+
+              <div className="card">
+                <div className="invest-page-header">
+                    <div className="admin-tabs">
+                        <button className={`admin-tab-btn ${activeTab === 'all' ? 'active' : ''}`} onClick={() => setActiveTab('all')}>All Opportunities</button>
+                        <button className={`admin-tab-btn ${activeTab === 'my' ? 'active' : ''}`} onClick={() => setActiveTab('my')}>My Active Investments</button>
+                    </div>
+                    <div className="search-bar-container">
+                        <FiSearch className="search-bar-icon" />
+                        <input type="text" placeholder="Search..." className="search-bar-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                    </div>
+                </div>
+                {renderContent()}
+            </div>
         </div>
     );
 }
