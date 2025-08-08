@@ -327,7 +327,7 @@ p { color: var(--text-secondary); line-height: 1.6; }
 .status-box.success { background-color: #d4edda; color: #155724; }
 .status-box.error { background-color: #f8d7da; color: #721c24; }
 .status-box.info { background-color: #d1ecf1; color: #0c5460; }
-/* Add this to the end of your App.css */
+
 
 .admin-tabs {
     display: flex;
@@ -441,18 +441,18 @@ p { color: var(--text-secondary); line-height: 1.6; }
     background-color: var(--secondary-bg);
     border-radius: 12px;
     border: 1px solid var(--border-color);
-}/* Add this to the end of your App.css */
+}
 .role-badge.pending { background-color: #fff3cd; color: #856404; }
 .role-badge.approved { background-color: #d4edda; color: #155724; }
 .role-badge.rejected { background-color: #f8d7da; color: #721c24; }
 
 .btn-approve {
     color: #28a745;
-}/* Add this to the end of your App.css */
+}
 .role-badge.deposit { background-color: #d4edda; color: #155724; }
 .role-badge.investment { background-color: #d1ecf1; color: #0c5460; }
 .role-badge.completed { background-color: #d4edda; color: #155724; }
-/* Add this to the end of your App.css */
+
 
 .your-investments-section {
     width: 100%;
@@ -505,15 +505,25 @@ p { color: var(--text-secondary); line-height: 1.6; }
     font-weight: 600;
     color: var(--accent-color);
 }
-/* Add this to the end of your App.css */
-
-/* Loading Spinner Styles */
-/* Add this to the end of your App.css */
-
-/* Loading Spinner Styles */
-/* Add these styles to the end of your App.css */
 
 /* Enhanced Loading Spinner Styles */
+/* Add this to the end of your App.css */
+
+/* Loading Spinner Styles */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--bg-color);
+}
+
 .loading-logo {
     width: 120px;
     height: 120px;
@@ -521,9 +531,25 @@ p { color: var(--text-secondary); line-height: 1.6; }
     animation: pulse 2s infinite ease-in-out;
 }
 
+.loading-spinner {
+    border: 5px solid var(--border-color);
+    border-top: 5px solid var(--accent-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
 .loading-message {
-    font-size: 18px;
     margin-top: 20px;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
@@ -541,8 +567,6 @@ p { color: var(--text-secondary); line-height: 1.6; }
     }
 }
 
-/* Login/Signup Logo Style */
-/* Add this to the end of your App.css */
 
 /* Auth Logo (Login/Signup) */
 .auth-logo {

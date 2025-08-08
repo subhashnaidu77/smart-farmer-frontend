@@ -53,9 +53,10 @@ function WithdrawalPage({ userData }) {
     };
 
     return (
-        <div className="page-container">
-            <h1 style={{ marginBottom: '30px' }}>Make a Withdrawal</h1>
-            <div className="card">
+        <div className="page-container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
+            <div className="card" style={{width: '100%', maxWidth: '500px'}}>
+                <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Make a Withdrawal</h1>
                 <div className="form-group">
                     <label>Your Current Wallet Balance</label>
                     <p className="wallet-balance-display">₦{userData?.walletBalance?.toLocaleString() || 0}</p>
@@ -74,4 +75,5 @@ function WithdrawalPage({ userData }) {
         </div>
     );
 }
+
 export default WithdrawalPage;
