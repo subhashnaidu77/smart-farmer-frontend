@@ -6,9 +6,10 @@ import WithdrawalManagement from './WithdrawalManagement';
 import SystemActions from './SystemActions';
 import TransactionManagement from './TransactionManagement'; // Import the new component
 import { FiArrowLeft, FiBox, FiUsers, FiCreditCard, FiCpu, FiList } from 'react-icons/fi'; // Import new icon
-
+import { useTheme } from '../context/ThemeContext';
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('projects');
+     const { theme } = useTheme();
 const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
     return (
         <div className="page-container">
