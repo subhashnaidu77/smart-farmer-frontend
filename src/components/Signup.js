@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase'; // CORRECTED PATH
 import { doc, setDoc } from 'firebase/firestore';
-
+import { useTheme } from '../context/ThemeContext';
 function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [referralCode, setReferralCode] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+  const { theme } = useTheme(); // Get the current theme
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo
 
+    // ... all component logic is the same
     const handleSignup = async (e) => {
         e.preventDefault();
         setError('');
@@ -52,7 +55,7 @@ function Signup() {
 
     return (
         <div className="card" style={{ maxWidth: '450px', margin: '50px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
+            <img src={logoSrc} alt="Smart Farmer Logo" className="auth-logo" />
             <h2 style={{textAlign: 'center', marginBottom: '20px'}}>Create an Account</h2>
             {error && <p className="status-message error" style={{width: '100%'}}>{error}</p>}
             {success && <p className="status-message success" style={{width: '100%'}}>{success}</p>}

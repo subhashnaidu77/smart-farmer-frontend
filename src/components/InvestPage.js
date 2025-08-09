@@ -4,7 +4,7 @@ import { db, auth } from '../firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { FiTrendingUp, FiTarget, FiSearch, FiClock } from 'react-icons/fi';
 import CircularProgress from './CircularProgress';
-
+import { useTheme } from '../context/ThemeContext';
 const ProgressBar = ({ current, target }) => {
     const percentage = target > 0 ? (current / target) * 100 : 0;
     return (
@@ -21,6 +21,8 @@ function InvestPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('all');
     const currentUser = auth.currentUser;
+  const { theme } = useTheme(); // Get the current theme
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo
 
     useEffect(() => {
         const fetchData = async () => {
@@ -102,7 +104,7 @@ function InvestPage() {
     return (
         <div className="page-container">
    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '30px' }}>
-                <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
+                <img src={logoSrc} alt="Smart Farmer Logo" className="header-logo" />
                 <h1 style={{ margin: 0 }}>Investments</h1>
             </div>
 

@@ -6,13 +6,15 @@ import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle
 import EmailVerificationBanner from './EmailVerificationBanner';
 import apiClient from '../axiosConfig';
 import CircularProgress from './CircularProgress';
-
+import { useTheme } from '../context/ThemeContext'; 
 const ProgressBar = ({ current, target }) => {
     const percentage = target > 0 ? (current / target) * 100 : 0;
     return ( <div className="progress-bar-container"><div className="progress-bar-filled" style={{ width: `${percentage}%` }}></div></div> );
 };
 
 function Dashboard({ handleLogout, userData }) {
+    const { theme } = useTheme(); // Get the current theme
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
     const currentUser = auth.currentUser;
     const [projects, setProjects] = useState([]);
     const [myInvestments, setMyInvestments] = useState([]);
@@ -64,7 +66,7 @@ function Dashboard({ handleLogout, userData }) {
             {currentUser && !currentUser.emailVerified && <EmailVerificationBanner />}
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
+                    <img src={logoSrc} alt="Smart Farmer Logo" className="header-logo" />
                 <div>
                     <h1 style={{ margin: 0, fontWeight: 700 }}>Welcome, {userData?.firstName || userData?.email?.split('@')[0] || 'User'}!</h1>
                     <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)' }}>Let's make some green investments today.</p>
