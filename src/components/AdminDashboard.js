@@ -9,13 +9,13 @@ import { FiArrowLeft, FiBox, FiUsers, FiCreditCard, FiCpu, FiList } from 'react-
 
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('projects');
-
+const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
     return (
         <div className="page-container">
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                     {/* --- LOGO ADDED HERE --- */}
-                    <img src="/logo.png" alt="Smart Farmer Logo" className="header-logo" />
+                    <img src={logoSrc} alt="Smart Farmer Logo" className="header-logo" />
                     <div>
                         <h1 style={{ margin: 0, fontWeight: 700 }}>Admin Panel</h1>
                         <p style={{ margin: '4px 0 0', color: 'var(--text-secondary)' }}>Manage your platform data.</p>
