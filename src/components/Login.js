@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase'; 
-
+import { useTheme } from '../context/ThemeContext'; 
 function Login() {
+     const { theme } = useTheme();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+ const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png';
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
@@ -27,7 +28,8 @@ function Login() {
 
     return (
         <div className="card" style={{ maxWidth: '450px', margin: '50px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
+            {/* <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" /> */}
+           <img src={logoSrc} alt="Smart Farmer Logo" className="auth-logo" />
             <h2 style={{textAlign: 'center', marginBottom: '20px'}}>Welcome Back!</h2>
             {error && <p className="status-message error" style={{width: '100%'}}>{error}</p>}
             <form onSubmit={handleLogin} style={{width: '100%'}}>
