@@ -9,7 +9,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
- const logoSrc = theme === 'light' ? '/logo-dark-theme.png' : '/logo-dark-theme.png';
+ const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png';
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
