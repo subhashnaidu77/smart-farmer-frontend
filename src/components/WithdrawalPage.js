@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { FiCreditCard } from 'react-icons/fi';
-
+import { useTheme } from '../context/ThemeContext';
 function WithdrawalPage({ userData }) {
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ message: '', type: '' });
     const currentUser = auth.currentUser;
+const { theme } = useTheme(); // Get the current theme
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo
 
     const handleWithdrawalRequest = async (e) => {
         e.preventDefault();
@@ -54,7 +56,7 @@ function WithdrawalPage({ userData }) {
 
     return (
         <div className="page-container" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <img src="/logo.png" alt="Smart Farmer Logo" className="auth-logo" />
+            <img src={logoSrc} alt="Smart Farmer Logo" className="auth-logo" />
             <div className="card" style={{width: '100%', maxWidth: '500px'}}>
                 <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Make a Withdrawal</h1>
                 <div className="form-group">
