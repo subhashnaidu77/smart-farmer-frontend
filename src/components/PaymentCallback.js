@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import apiClient from '../axiosConfig'; 
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const styles = {
     container: {
@@ -19,46 +18,18 @@ const styles = {
 };
 
 function PaymentCallback() {
-    const [status, setStatus] = useState('Verifying your payment, please wait...');
-    const location = useLocation();
+    const [status, setStatus] = useState('Thank you for your payment. We are processing it now.');
     const navigate = useNavigate();
-    const effectRan = useRef(false); // This ref tracks if the verification has already run
 
     useEffect(() => {
-        // This check ensures the verification runs only ONCE,
-        // preventing the double-payment issue in React's development mode.
-        if (effectRan.current === false) {
-            const verifyPayment = async () => {
-                const searchParams = new URLSearchParams(location.search);
-                const reference = searchParams.get('reference');
+        // This page now just waits and then redirects.
+        // The actual wallet update happens in the background via the webhook.
+        setStatus('Your wallet will be updated in a few moments. Redirecting you to the dashboard...');
 
-                if (!reference) {
-                    setStatus('Payment reference not found. Redirecting...');
-                    setTimeout(() => navigate('/dashboard'), 3000);
-                    return;
-                }
-
-                try {
-                    // Call our backend to verify the payment
-                    await apiClient.get(`/payment/verify/${reference}`);
-                    setStatus('Payment successful! Your wallet has been updated. Redirecting...');
-                } catch (error) {
-                    console.error("Payment verification failed:", error);
-                    setStatus('Payment verification failed. Please contact support. Redirecting...');
-                } finally {
-                    // Redirect back to the dashboard after a few seconds
-                    setTimeout(() => navigate('/dashboard'), 3000);
-                }
-            };
-
-            verifyPayment();
-
-            // Mark that the effect has run so it doesn't run again
-            return () => {
-                effectRan.current = true;
-            };
-        }
-    }, [location, navigate]);
+        setTimeout(() => {
+            navigate('/dashboard');
+        }, 4000); // Wait 4 seconds before redirecting
+    }, [navigate]);
 
     return (
         <div style={styles.container}>
