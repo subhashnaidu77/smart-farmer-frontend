@@ -3,7 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 // This is our new animated loading spinner component
 function LoadingSpinner({ message }) {
      const { theme } = useTheme(); // Get the current theme
-    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-light-theme.png'; // Choose logo based on theme
 
     return (
         <div className="loading-container">
