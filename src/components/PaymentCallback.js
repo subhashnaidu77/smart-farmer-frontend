@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '80vh',
-        textAlign: 'center'
-    },
-    message: {
-        fontSize: '1.5em',
-        fontWeight: '500',
-        marginBottom: '20px'
-    }
-};
-
 function PaymentCallback() {
     const [status, setStatus] = useState('Thank you for your payment. We are processing it now.');
     const navigate = useNavigate();
 
     useEffect(() => {
-        // This page now just waits and then redirects.
+        // This page just waits and then redirects.
         // The actual wallet update happens in the background via the webhook.
         setStatus('Your wallet will be updated in a few moments. Redirecting you to the dashboard...');
 
@@ -32,8 +16,8 @@ function PaymentCallback() {
     }, [navigate]);
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.message}>{status}</h2>
+        <div className="page-container" style={{textAlign: 'center', paddingTop: '100px'}}>
+            <h2>{status}</h2>
         </div>
     );
 }

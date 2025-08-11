@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
-import { doc, getDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle, FiGrid, FiSearch, FiClock } from 'react-icons/fi';
 import EmailVerificationBanner from './EmailVerificationBanner';
 import apiClient from '../axiosConfig';
 import CircularProgress from './CircularProgress';
 import { useTheme } from '../context/ThemeContext'; 
+
 const ProgressBar = ({ current, target }) => {
     const percentage = target > 0 ? (current / target) * 100 : 0;
     return ( <div className="progress-bar-container"><div className="progress-bar-filled" style={{ width: `${percentage}%` }}></div></div> );
 };
 
 function Dashboard({ handleLogout, userData }) {
-    
-    const { theme } = useTheme(); // Get the current theme
-    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
+    const { theme } = useTheme();
+    const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png';
     const currentUser = auth.currentUser;
     const [projects, setProjects] = useState([]);
     const [myInvestments, setMyInvestments] = useState([]);
@@ -51,7 +51,7 @@ function Dashboard({ handleLogout, userData }) {
             const response = await apiClient.post('/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
-                // callbackUrl: `${window.location.origin}/payment/callback`
+                callbackUrl: `${window.location.origin}/payment/callback`
             });
             window.location.href = response.data.data.authorization_url;
         } catch (error) {
@@ -99,11 +99,9 @@ function Dashboard({ handleLogout, userData }) {
                             const investmentDate = investment.createdAt.toDate();
                             const maturityDate = new Date(investmentDate);
                             maturityDate.setDate(maturityDate.getDate() + investment.durationDays);
-                            
                             const totalDuration = maturityDate - investmentDate;
                             const timeElapsed = new Date() - investmentDate;
                             const percentage = Math.min((timeElapsed / totalDuration) * 100, 100);
-                            
                             const daysLeft = Math.ceil((maturityDate - new Date()) / (1000 * 60 * 60 * 24));
 
                             return (

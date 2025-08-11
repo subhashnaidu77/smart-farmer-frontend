@@ -9,7 +9,7 @@ function LoadingSpinner({ message }) {
         <div className="loading-container">
             <img src={logoSrc} alt="Smart Farmer Logo" className="loading-logo" />
             <div className="loading-spinner"></div>
-            <p className="loading-message">{message || 'Loading...'}</p>
+            {/* <p className="loading-message">{message || 'Loading...'}</p> */}
         </div>
     );
 }
