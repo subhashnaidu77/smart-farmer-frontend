@@ -13,6 +13,7 @@ const ProgressBar = ({ current, target }) => {
 };
 
 function Dashboard({ handleLogout, userData }) {
+    
     const { theme } = useTheme(); // Get the current theme
     const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo based on theme
     const currentUser = auth.currentUser;
@@ -50,7 +51,7 @@ function Dashboard({ handleLogout, userData }) {
             const response = await apiClient.post('/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
-                callbackUrl: `${window.location.origin}/payment/callback`
+                // callbackUrl: `${window.location.origin}/payment/callback`
             });
             window.location.href = response.data.data.authorization_url;
         } catch (error) {
