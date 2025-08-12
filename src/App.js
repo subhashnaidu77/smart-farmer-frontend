@@ -24,6 +24,8 @@ import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
+import AddMoneyManually from './components/AddMoneyManually';
+
 
 function App() {
   const { theme } = useTheme();
@@ -88,6 +90,7 @@ function App() {
                 <Route path="/admin" element={<AdminRoute userData={userData}><AdminDashboard /></AdminRoute>} />
                 <Route path="/payment/callback" element={<PaymentCallback />} />
                 <Route path="*" element={<Navigate to="/dashboard" />} />
+                 <Route path="/add-money" element={<AddMoneyManually />} />
               </>
             ) : (
               <>

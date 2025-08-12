@@ -585,3 +585,26 @@ p { color: var(--text-secondary); line-height: 1.6; }
     height: 50px;
     width: 50px;
 }
+/* Add this to the end of App.css */
+/* Add this to the end of your App.css */
+.info-box {
+    background-color: var(--bg-color);
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.copy-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 18px;
+}
+.copy-btn:hover {
+    color: var(--accent-color);
+}
