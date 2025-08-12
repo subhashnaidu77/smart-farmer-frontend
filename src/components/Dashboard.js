@@ -51,7 +51,10 @@ function Dashboard({ handleLogout, userData }) {
             const response = await apiClient.post('/payment/initialize', {
                 email: currentUser.email,
                 amount: amount,
-                callbackUrl: `${window.location.origin}/payment/callback`
+                callbackUrl: `${window.location.origin}/payment/callback`,
+                metadata: {
+                    userId: currentUser.uid // 🔹 Added userId for webhook
+                }
             });
             window.location.href = response.data.data.authorization_url;
         } catch (error) {
