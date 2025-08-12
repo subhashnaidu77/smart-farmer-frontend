@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { doc, getDoc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle, FiGrid, FiSearch, FiClock } from 'react-icons/fi';
+import { FiSettings, FiLogOut, FiTrendingUp, FiTarget, FiBriefcase, FiPlusCircle, FiGrid, FiSearch, FiClock ,FiEdit} from 'react-icons/fi';
 import EmailVerificationBanner from './EmailVerificationBanner';
 import apiClient from '../axiosConfig';
 import CircularProgress from './CircularProgress';
