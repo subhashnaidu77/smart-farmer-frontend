@@ -12,7 +12,12 @@ const { theme } = useTheme(); // Get the current theme
     const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png'; // Choose logo
 
     const handleWithdrawalRequest = async (e) => {
-        e.preventDefault();
+ e.preventDefault();
+        if (!currentUser) {
+            setStatus({ message: 'You must be logged in.', type: 'error' });
+            return;
+        }
+
         const withdrawalAmount = parseFloat(amount);
 
         if (isNaN(withdrawalAmount) || withdrawalAmount <= 0) {
@@ -35,6 +40,7 @@ const { theme } = useTheme(); // Get the current theme
 
         try {
             const withdrawalsCollectionRef = collection(db, "withdrawals");
+            // This is the important part - ensuring userId is saved
             await addDoc(withdrawalsCollectionRef, {
                 userId: currentUser.uid,
                 email: currentUser.email,
