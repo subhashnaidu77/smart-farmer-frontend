@@ -5,8 +5,9 @@ import UserManagement from './UserManagement';
 import WithdrawalManagement from './WithdrawalManagement';
 import SystemActions from './SystemActions';
 import TransactionManagement from './TransactionManagement'; // Import the new component
-import { FiArrowLeft, FiBox, FiUsers, FiCreditCard, FiCpu, FiList } from 'react-icons/fi'; // Import new icon
+import { FiArrowLeft, FiBox, FiUsers, FiCreditCard, FiCpu, FiList,FiEdit  } from 'react-icons/fi'; // Import new icon
 import { useTheme } from '../context/ThemeContext';
+import ManualDepositManagement from './ManualDepositManagement';
 function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('projects');
      const { theme } = useTheme();
@@ -31,6 +32,8 @@ const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.
                 <div className="admin-tabs">
                     <button className={`admin-tab-btn ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => setActiveTab('projects')}><FiBox /> Project Management</button>
                     <button className={`admin-tab-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}><FiUsers /> User Management</button>
+                    <button className={`admin-tab-btn ${activeTab === 'deposits' ? 'active' : ''}`} onClick={() => setActiveTab('deposits')}><FiEdit /> Manual Deposits</button>
+
                     <button className={`admin-tab-btn ${activeTab === 'withdrawals' ? 'active' : ''}`} onClick={() => setActiveTab('withdrawals')}><FiCreditCard /> Withdrawal Management</button>
                     <button className={`admin-tab-btn ${activeTab === 'transactions' ? 'active' : ''}`} onClick={() => setActiveTab('transactions')}><FiList /> Transaction Management</button>
                     <button className={`admin-tab-btn ${activeTab === 'system' ? 'active' : ''}`} onClick={() => setActiveTab('system')}><FiCpu /> System Actions</button>
@@ -40,6 +43,7 @@ const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.
                     {activeTab === 'projects' && <ProjectManagement />}
                     {activeTab === 'users' && <UserManagement />}
                     {activeTab === 'withdrawals' && <WithdrawalManagement />}
+                    {activeTab === 'deposits' && <ManualDepositManagement />}
                     {activeTab === 'transactions' && <TransactionManagement />}
                     {activeTab === 'system' && <SystemActions />}
                 </div>
