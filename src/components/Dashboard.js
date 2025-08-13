@@ -91,10 +91,10 @@ function Dashboard({ handleLogout, userData }) {
                         <p style={{ margin: '4px 0 0', fontSize: '28px', fontWeight: '700', color: 'var(--accent-color)' }}>₦{userData?.walletBalance?.toLocaleString() || 0}</p>
                     </div>
                     <div style={{display: 'flex', gap: '10px'}}>
-                     <Link to="/add-money" className="btn btn-secondary">
-                            <FiEdit /> Add Manually
+                     <Link to="/add-money" className="btn btn-primary">
+                            <FiPlusCircle /> Add Money Manually
                         </Link>
-                    <button onClick={handleAddMoney} className="btn btn-primary"><FiPlusCircle /> Add Money</button>
+                    <button onClick={handleAddMoney} className="btn btn-primary"><FiPlusCircle /> Add Money with Velvpay</button>
              
                </div>
                 </div>
