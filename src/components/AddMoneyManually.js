@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { FiClipboard, FiSend, FiArrowLeft } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function AddMoneyManually() {
     const [amount, setAmount] = useState('');
@@ -11,7 +12,7 @@ function AddMoneyManually() {
     const [status, setStatus] = useState({ message: '', type: '' });
     const [selectedAccountIndex, setSelectedAccountIndex] = useState(0); // For the toggle
     const currentUser = auth.currentUser;
-
+const { showModal } = useModal(); // Get the showModal function
     const companyAccounts = [
         { bankName: "Vfd Bank", accountNumber: "1040594549", accountName: "Smart Farmer" },
         { bankName: "Kolomoni", accountNumber: "0990028382", accountName: "Smart Farmer" }
@@ -21,7 +22,7 @@ function AddMoneyManually() {
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text);
-        alert(`'${text}' copied to clipboard!`);
+        showModal(`'${text}' copied to clipboard!`);
     };
 
     const handleSubmitClaim = async (e) => {

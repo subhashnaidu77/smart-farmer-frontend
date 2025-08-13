@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../axiosConfig'; 
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function UserManagement() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+const { showModal } = useModal(); // Get the showModal function
     const fetchUsers = async () => {
         setLoading(true);
         try {
@@ -30,10 +31,10 @@ function UserManagement() {
         if (!window.confirm(`Are you sure you want to change ${email}'s role to ${newRole}?`)) return;
         try {
             await apiClient.post('/admin/users/setrole', { uid, role: newRole });
-            alert('User role updated successfully!');
+            showModal('User role updated successfully!');
             fetchUsers();
         } catch (error) {
-            alert('Failed to update user role.');
+            showModal('Failed to update user role.');
             console.error("Role update error:", error);
         }
     };
@@ -42,10 +43,10 @@ function UserManagement() {
         if (!window.confirm(`Are you sure you want to PERMANENTLY delete the user ${email}? This cannot be undone.`)) return;
         try {
             await apiClient.delete(`/admin/users/${uid}`);
-            alert('User deleted successfully!');
+            showModal('User deleted successfully!');
             fetchUsers();
         } catch (error) {
-            alert('Failed to delete user.');
+            showModal('Failed to delete user.');
             console.error("Delete user error:", error);
         }
     };

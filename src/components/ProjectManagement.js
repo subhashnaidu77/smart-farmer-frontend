@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { FiPlus, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function ProjectManagement() {
     const [projects, setProjects] = useState([]);
@@ -11,7 +12,7 @@ function ProjectManagement() {
     const [isEditing, setIsEditing] = useState(false);
     const [currentProjectId, setCurrentProjectId] = useState(null);
     const projectsCollectionRef = collection(db, 'projects');
-
+const { showModal } = useModal(); // Get the showModal function
     const getProjects = async () => {
         const data = await getDocs(projectsCollectionRef);
         setProjects(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
@@ -46,9 +47,9 @@ function ProjectManagement() {
 
         if (isEditing) {
             const projectDoc = doc(db, "projects", currentProjectId);
-            try { await updateDoc(projectDoc, dataToSubmit); alert('Project updated!'); clearForm(); getProjects(); } catch (err) { alert('Error: ' + err.message); }
+            try { await updateDoc(projectDoc, dataToSubmit); showModal('Project updated!'); clearForm(); getProjects(); } catch (err) { showModal('Error: ' + err.message); }
         } else {
-            try { await addDoc(projectsCollectionRef, { ...dataToSubmit, currentAmount: 0, status: 'Open', createdAt: serverTimestamp() }); alert('Project added!'); clearForm(); getProjects(); } catch (err) { alert('Error: ' + err.message); }
+            try { await addDoc(projectsCollectionRef, { ...dataToSubmit, currentAmount: 0, status: 'Open', createdAt: serverTimestamp() }); showModal('Project added!'); clearForm(); getProjects(); } catch (err) { showModal('Error: ' + err.message); }
         }
     };
 
@@ -62,7 +63,7 @@ function ProjectManagement() {
     const handleDeleteProject = async (id) => {
         if (window.confirm("Are you sure?")) {
             const projectDoc = doc(db, "projects", id);
-            try { await deleteDoc(projectDoc); alert('Project deleted!'); getProjects(); } catch (err) { alert('Error: ' + err.message); }
+            try { await deleteDoc(projectDoc); showModal('Project deleted!'); getProjects(); } catch (err) { showModal('Error: ' + err.message); }
         }
     };
 

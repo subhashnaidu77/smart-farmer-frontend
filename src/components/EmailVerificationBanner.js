@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { sendEmailVerification } from 'firebase/auth';
+import { useModal } from '../context/ModalContext';
 
 const styles = {
     banner: {
@@ -25,7 +26,7 @@ const styles = {
         cursor: 'pointer'
     }
 };
-
+const { showModal } = useModal(); // Get the showModal function
 function EmailVerificationBanner() {
     const [emailSent, setEmailSent] = useState(false);
 
@@ -33,10 +34,10 @@ function EmailVerificationBanner() {
         try {
             await sendEmailVerification(auth.currentUser);
             setEmailSent(true);
-            alert('Verification email sent! Please check your inbox (and spam folder).');
+            showModal('Verification email sent! Please check your inbox (and spam folder).');
         } catch (error) {
             console.error("Error sending verification email:", error);
-            alert('Failed to send verification email. Please try again later.');
+            showModal('Failed to send verification email. Please try again later.');
         }
     };
 

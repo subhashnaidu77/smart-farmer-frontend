@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../axiosConfig'; // Use the live URL config
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function WithdrawalManagement() {
     const [withdrawals, setWithdrawals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+const { showModal } = useModal(); // Get the showModal function
     const fetchWithdrawals = async () => {
         setLoading(true);
         try {
@@ -30,10 +31,10 @@ function WithdrawalManagement() {
         try {
             // Use apiClient to call the live backend
             await apiClient.post('/admin/withdrawals/update', { id, status });
-            alert(`Request successfully marked as ${status}.`);
+            showModal(`Request successfully marked as ${status}.`);
             fetchWithdrawals(); // Refresh the list
         } catch (error) {
-            alert('Failed to update status.');
+            showModal('Failed to update status.');
         }
     };
 

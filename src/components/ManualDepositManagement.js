@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../axiosConfig';
 import { FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function ManualDepositManagement() {
     const [deposits, setDeposits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+const { showModal } = useModal(); // Get the showModal function
     const fetchDeposits = async () => {
         setLoading(true);
         try {
@@ -28,10 +29,10 @@ function ManualDepositManagement() {
         if (!window.confirm(`Are you sure you want to ${status} this request?`)) return;
         try {
             await apiClient.post('/admin/manual-deposits/update', { id, status, userId, amount });
-            alert(`Request successfully marked as ${status}.`);
+            showModal(`Request successfully marked as ${status}.`);
             fetchDeposits(); // Refresh the list
         } catch (error) {
-            alert('Failed to update status.');
+            showModal('Failed to update status.');
         }
     };
 

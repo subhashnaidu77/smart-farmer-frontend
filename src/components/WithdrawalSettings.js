@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useModal } from '../context/ModalContext';
 
 const styles = {
     form: { display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' },
@@ -9,6 +10,7 @@ const styles = {
     input: { padding: '12px', borderRadius: '4px', border: '1px solid var(--border-color)', fontSize: '16px' },
     button: { padding: '15px', backgroundColor: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }
 };
+const { showModal } = useModal(); // Get the showModal function
 
 function WithdrawalSettings() {
     const [settings, setSettings] = useState({ bankName: '', accountNumber: '', accountName: '' });
@@ -34,9 +36,9 @@ function WithdrawalSettings() {
         const userDocRef = doc(db, 'users', currentUser.uid);
         try {
             await updateDoc(userDocRef, { withdrawalSettings: settings });
-            alert('Withdrawal settings saved successfully!');
+            showModal('Withdrawal settings saved successfully!');
         } catch (error) {
-            alert('Error saving settings: ' + error.message);
+            showModal('Error saving settings: ' + error.message);
         }
     };
 

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { FiCopy } from 'react-icons/fi';
+import { useModal } from '../context/ModalContext';
 
 function Referrals({ userData }) {
     const [referredUsers, setReferredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-
+const { showModal } = useModal(); // Get the showModal function
     useEffect(() => {
         const fetchReferredUsers = async () => {
             if (userData && userData.referralCode) {
@@ -35,7 +36,7 @@ function Referrals({ userData }) {
     const handleCopy = () => {
         if (userData && userData.referralCode) {
             navigator.clipboard.writeText(userData.referralCode);
-            alert('Referral code copied to clipboard!');
+            showModal('Referral code copied to clipboard!');
         }
     };
 

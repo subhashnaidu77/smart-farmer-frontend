@@ -3,6 +3,7 @@ import { auth, db } from '../firebase';
 import { EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { useModal } from '../context/ModalContext';
 
 const styles = {
     container: { padding: '20px', border: '2px solid #dc3545', borderRadius: '8px', backgroundColor: '#f8d7da' },
@@ -10,7 +11,7 @@ const styles = {
     text: { color: '#721c24' },
     button: { width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }
 };
-
+const { showModal } = useModal(); // Get the showModal function
 function DeleteAccount() {
     const navigate = useNavigate();
 
@@ -35,14 +36,14 @@ function DeleteAccount() {
             // Step 3: Delete user from Firebase Auth
             await deleteUser(user);
 
-            alert("Your account has been permanently deleted.");
+            showModal("Your account has been permanently deleted.");
             navigate('/login');
 
         } catch (error) {
             if (error.code === 'auth/wrong-password') {
-                alert("Incorrect password. Account deletion failed.");
+                showModal("Incorrect password. Account deletion failed.");
             } else {
-                alert("An error occurred. Could not delete account.");
+                showModal("An error occurred. Could not delete account.");
             }
             console.error("Error deleting account:", error);
         }
