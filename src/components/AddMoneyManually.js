@@ -52,7 +52,7 @@ function AddMoneyManually() {
 
     return (
         <div className="page-container">
-             <Link to="/dashboard" className="back-link" style={{ marginBottom: '30px' }}><FiArrowLeft /> Back to Dashboard</Link>
+             <Link to="/dashboard" className="back-link" style={{ marginBottom: '30px' ,textDecoration:'none'}}><FiArrowLeft /> Back to Dashboard</Link>
             <h1 style={{ marginBottom: '30px', textAlign: 'center' ,textDecoration:'none'}}>Add Money Manually</h1>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px', alignItems: 'flex-start' }}>
                 <div className="card">
