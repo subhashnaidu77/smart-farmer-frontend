@@ -608,3 +608,29 @@ p { color: var(--text-secondary); line-height: 1.6; }
 .copy-btn:hover {
     color: var(--accent-color);
 }
+/* --- Styles for Bank Account Toggle --- */
+.account-toggle {
+    display: flex;
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    padding: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background-color: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(var(--accent-color-green-rgb), 0.3);
+}
