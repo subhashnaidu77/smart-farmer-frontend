@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, 'useState' from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -11,7 +11,6 @@ function AddMoneyManually() {
     const [status, setStatus] = useState({ message: '', type: '' });
     const currentUser = auth.currentUser;
 
-    // --- THIS IS THE UPDATE ---
     // We now have an array of two bank accounts
     const companyAccounts = [
         {
