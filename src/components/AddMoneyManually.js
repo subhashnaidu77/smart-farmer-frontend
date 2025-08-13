@@ -11,11 +11,20 @@ function AddMoneyManually() {
     const [status, setStatus] = useState({ message: '', type: '' });
     const currentUser = auth.currentUser;
 
-    const companyAccount = {
-        bankName: "Vfd Bank",
-        accountNumber: "1040594549",
-        accountName: "Smart Farmer"
-    };
+    // --- THIS IS THE UPDATE ---
+    // We now have an array of two bank accounts
+    const companyAccounts = [
+        {
+            bankName: "Vfd Bank",
+            accountNumber: "1040594549",
+            accountName: "Smart Farmer"
+        },
+        {
+            bankName: "Kolomoni",
+            accountNumber: "0990028382",
+            accountName: "Smart Farmer"
+        }
+    ];
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text);
@@ -37,7 +46,7 @@ function AddMoneyManually() {
                 email: currentUser.email,
                 amount: Number(amount),
                 senderName: senderName,
-                status: 'pending', // All new requests are pending admin approval
+                status: 'pending',
                 createdAt: serverTimestamp()
             });
             setStatus({ message: 'Your deposit claim has been submitted! It will be reviewed by an admin within 24 hours.', type: 'success' });
@@ -58,22 +67,25 @@ function AddMoneyManually() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px', alignItems: 'flex-start' }}>
                 <div className="card">
                     <h3 style={{ marginTop: 0 }}>Step 1: Make Your Transfer</h3>
-                    <p>Please make a direct bank transfer to the following account details.</p>
-                    <div className="form-group">
-                        <label>Bank Name</label>
-                        <div className="info-box">{companyAccount.bankName}</div>
-                    </div>
-                    <div className="form-group">
-                        <label>Account Number</label>
-                        <div className="info-box">
-                            <span>{companyAccount.accountNumber}</span>
-                            <button onClick={() => handleCopy(companyAccount.accountNumber)} className="copy-btn" title="Copy"><FiClipboard /></button>
+                    <p>Please make a direct bank transfer to **either** of the following account details.</p>
+                    
+                    {/* We now map over the accounts array to display both */}
+                    {companyAccounts.map((account, index) => (
+                        <div key={index} style={{ border: '1px solid var(--border-color)', borderRadius: '8px', padding: '15px', marginBottom: '20px' }}>
+                            <h4 style={{marginTop: 0, color: 'var(--accent-color)'}}>{account.bankName}</h4>
+                            <div className="form-group">
+                                <label>Account Number</label>
+                                <div className="info-box">
+                                    <span>{account.accountNumber}</span>
+                                    <button onClick={() => handleCopy(account.accountNumber)} className="copy-btn" title="Copy"><FiClipboard /></button>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Account Name</label>
+                                <div className="info-box">{account.accountName}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Account Name</label>
-                        <div className="info-box">{companyAccount.accountName}</div>
-                    </div>
+                    ))}
                 </div>
                 <div className="card">
                     <h3 style={{ marginTop: 0 }}>Step 2: Submit Your Claim</h3>
