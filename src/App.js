@@ -25,10 +25,13 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import AddMoneyManually from './components/AddMoneyManually';
+import Modal from './components/Modal';
+import { useModal } from './context/ModalContext';
 
 
 function App() {
   const { theme } = useTheme();
+   const { show, message, type, hideModal } = useModal();
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -77,6 +80,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className={`App ${theme}`}>
+         <Modal show={show} message={message} type={type} onClose={hideModal} />
         <main className="main-content">
           <Routes>
             {currentUser ? (

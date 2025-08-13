@@ -7,6 +7,7 @@ import EmailVerificationBanner from './EmailVerificationBanner';
 import apiClient from '../axiosConfig';
 import CircularProgress from './CircularProgress';
 import { useTheme } from '../context/ThemeContext'; 
+import { useModal } from '../context/ModalContext';
 
 const ProgressBar = ({ current, target }) => {
     const percentage = target > 0 ? (current / target) * 100 : 0;
@@ -15,6 +16,7 @@ const ProgressBar = ({ current, target }) => {
 
 function Dashboard({ handleLogout, userData }) {
     const { theme } = useTheme();
+     const { showModal } = useModal();
     const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png';
     const currentUser = auth.currentUser;
     const [projects, setProjects] = useState([]);
@@ -43,9 +45,9 @@ function Dashboard({ handleLogout, userData }) {
     }, [currentUser]);
 
     const handleAddMoney = async () => {
-        if (!currentUser) return alert("Please log in.");
+        if (!currentUser) return showModal("Please log in.");
         const amountStr = prompt("Enter amount:", "1000");
-        if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) return alert("Please enter a valid amount.");
+        if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) return showModal("Please enter a valid amount.");
         const amount = Number(amountStr);
         try {
             const response = await apiClient.post('/payment/initialize', {
@@ -59,7 +61,7 @@ function Dashboard({ handleLogout, userData }) {
             window.location.href = response.data.data.authorization_url;
         } catch (error) {
             console.error("Error initializing payment:", error);
-            alert("Failed to start payment.");
+            showModal("Failed to start payment.");
         }
     };
 
