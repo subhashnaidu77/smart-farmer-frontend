@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -9,21 +9,15 @@ function AddMoneyManually() {
     const [senderName, setSenderName] = useState('');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ message: '', type: '' });
+    const [selectedAccountIndex, setSelectedAccountIndex] = useState(0); // For the toggle
     const currentUser = auth.currentUser;
 
-    // We now have an array of two bank accounts
     const companyAccounts = [
-        {
-            bankName: "Vfd Bank",
-            accountNumber: "1040594549",
-            accountName: "Smart Farmer"
-        },
-        {
-            bankName: "Kolomoni",
-            accountNumber: "0990028382",
-            accountName: "Smart Farmer"
-        }
+        { bankName: "Vfd Bank", accountNumber: "1040594549", accountName: "Smart Farmer" },
+        { bankName: "Kolomoni", accountNumber: "0990028382", accountName: "Smart Farmer" }
     ];
+
+    const selectedAccount = companyAccounts[selectedAccountIndex];
 
     const handleCopy = (text) => {
         navigator.clipboard.writeText(text);
@@ -32,21 +26,18 @@ function AddMoneyManually() {
 
     const handleSubmitClaim = async (e) => {
         e.preventDefault();
-        if (!currentUser) {
-            setStatus({ message: 'You must be logged in to submit a claim.', type: 'error' });
-            return;
-        }
+        if (!currentUser) return;
         setLoading(true);
         setStatus({ message: '', type: '' });
         try {
-            const depositsCollectionRef = collection(db, "manual_deposits");
-            await addDoc(depositsCollectionRef, {
+            await addDoc(collection(db, "manual_deposits"), {
                 userId: currentUser.uid,
                 email: currentUser.email,
                 amount: Number(amount),
-                senderName: senderName,
+                senderName,
                 status: 'pending',
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
+                transferredTo: selectedAccount.bankName // Store which bank they used
             });
             setStatus({ message: 'Your deposit claim has been submitted! It will be reviewed by an admin within 24 hours.', type: 'success' });
             setAmount('');
@@ -66,25 +57,34 @@ function AddMoneyManually() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '30px', alignItems: 'flex-start' }}>
                 <div className="card">
                     <h3 style={{ marginTop: 0 }}>Step 1: Make Your Transfer</h3>
-                    <p>Please make a direct bank transfer to **either** of the following account details.</p>
+                    <p>Please select a bank and make a direct transfer to the details shown.</p>
                     
-                    {/* We now map over the accounts array to display both */}
-                    {companyAccounts.map((account, index) => (
-                        <div key={index} style={{ border: '1px solid var(--border-color)', borderRadius: '8px', padding: '15px', marginBottom: '20px' }}>
-                            <h4 style={{marginTop: 0, color: 'var(--accent-color)'}}>{account.bankName}</h4>
-                            <div className="form-group">
-                                <label>Account Number</label>
-                                <div className="info-box">
-                                    <span>{account.accountNumber}</span>
-                                    <button onClick={() => handleCopy(account.accountNumber)} className="copy-btn" title="Copy"><FiClipboard /></button>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Account Name</label>
-                                <div className="info-box">{account.accountName}</div>
+                    {/* --- THIS IS THE NEW TOGGLE SWITCH --- */}
+                    <div className="account-toggle">
+                        {companyAccounts.map((account, index) => (
+                            <button
+                                key={index}
+                                className={`toggle-btn ${selectedAccountIndex === index ? 'active' : ''}`}
+                                onClick={() => setSelectedAccountIndex(index)}
+                            >
+                                {account.bankName}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div style={{ marginTop: '20px' }}>
+                        <div className="form-group">
+                            <label>Account Number</label>
+                            <div className="info-box">
+                                <span>{selectedAccount.accountNumber}</span>
+                                <button onClick={() => handleCopy(selectedAccount.accountNumber)} className="copy-btn" title="Copy"><FiClipboard /></button>
                             </div>
                         </div>
-                    ))}
+                        <div className="form-group">
+                            <label>Account Name</label>
+                            <div className="info-box">{selectedAccount.accountName}</div>
+                        </div>
+                    </div>
                 </div>
                 <div className="card">
                     <h3 style={{ marginTop: 0 }}>Step 2: Submit Your Claim</h3>
