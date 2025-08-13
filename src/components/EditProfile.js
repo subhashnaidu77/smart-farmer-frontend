@@ -9,11 +9,11 @@ const styles = {
     label: { marginBottom: '5px', fontSize: '14px', color: '#333' },
     input: { padding: '12px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '16px' },
     button: { padding: '15px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }
-};const { showModal } = useModal(); // Get the showModal function
+};
 
 function EditProfile({ refreshUserData }) { // Receive the function as a prop
     const [profile, setProfile] = useState({ firstName: '', lastName: '', phone: '' });
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);const { showModal } = useModal();
     const currentUser = auth.currentUser;
 
     useEffect(() => {

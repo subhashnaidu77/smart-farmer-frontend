@@ -26,10 +26,10 @@ const styles = {
         cursor: 'pointer'
     }
 };
-const { showModal } = useModal(); // Get the showModal function
+
 function EmailVerificationBanner() {
     const [emailSent, setEmailSent] = useState(false);
-
+const { showModal } = useModal(); // Get the showModal function
     const handleSendVerification = async () => {
         try {
             await sendEmailVerification(auth.currentUser);

@@ -11,10 +11,10 @@ const styles = {
     text: { color: '#721c24' },
     button: { width: '100%', padding: '15px', marginTop: '20px', backgroundColor: '#dc3545', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }
 };
-const { showModal } = useModal(); // Get the showModal function
+// const { showModal } = useModal(); // Get the showModal function
 function DeleteAccount() {
     const navigate = useNavigate();
-
+const { showModal } = useModal();
     const handleDeleteAccount = async () => {
         const confirmation = window.confirm("ARE YOU ABSOLUTELY SURE? This action cannot be undone. All your investments and data will be permanently deleted.");
         if (!confirmation) return;

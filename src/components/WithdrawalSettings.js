@@ -10,10 +10,11 @@ const styles = {
     input: { padding: '12px', borderRadius: '4px', border: '1px solid var(--border-color)', fontSize: '16px' },
     button: { padding: '15px', backgroundColor: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }
 };
-const { showModal } = useModal(); // Get the showModal function
+
 
 function WithdrawalSettings() {
     const [settings, setSettings] = useState({ bankName: '', accountNumber: '', accountName: '' });
+   const { showModal } = useModal(); // Get the showModal function
     const currentUser = auth.currentUser;
 
     useEffect(() => {
