@@ -260,7 +260,7 @@ export default function LandingPage() {
               Login
             </a>
             <a
-              href="/register"
+              href="/signup"
               style={btn}
               onMouseEnter={(e) =>
                 Object.assign(e.currentTarget.style, {
@@ -354,7 +354,7 @@ export default function LandingPage() {
                 <a href="#estimator" style={btn}>
                   Try the Estimator
                 </a>
-                <a href="/register" style={btnGhost}>
+                <a href="/signup" style={btnGhost}>
                   Create Account
                 </a>
                 <a
@@ -484,7 +484,7 @@ export default function LandingPage() {
                 <a href="/login" style={btnGhost}>
                   Open the App
                 </a>
-                <a href="/register" style={btn}>
+                <a href="/signup" style={btn}>
                   Create Account
                 </a>
               </div>
@@ -606,7 +606,7 @@ export default function LandingPage() {
                   marginTop: 12,
                 }}
               >
-                <a href="/register" style={btn}>
+                <a href="/signup" style={btn}>
                   Create Account
                 </a>
                 <a
@@ -778,18 +778,11 @@ export default function LandingPage() {
               returns.
             </div>
           </div>
-          <div>
-            <div style={{ fontWeight: 800, marginBottom: 8 }}>Company</div>
-            <FLink href="/about">About</FLink>
-            <FLink href="/careers">Careers</FLink>
-            <FLink href="/privacy">Privacy</FLink>
-            <FLink href="/terms">Terms</FLink>
-          </div>
+
           <div>
             <div style={{ fontWeight: 800, marginBottom: 8 }}>Get Started</div>
             <FLink href="#estimator">Try Estimator</FLink>
             <FLink href="/login">Open App</FLink>
-            <FLink href="#faq">Read FAQ</FLink>
           </div>
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,.14)" }}>
@@ -803,7 +796,6 @@ export default function LandingPage() {
             }}
           >
             <span>© {new Date().getFullYear()} SmartFarmer</span>
-            <span>Images: Smart Farmer artwork</span>
           </div>
         </div>
       </footer>
@@ -823,7 +815,7 @@ export default function LandingPage() {
           <div
             style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}
           >
-            <a href="/register" style={{ ...btn, textAlign: "center" }}>
+            <a href="/signup" style={{ ...btn, textAlign: "center" }}>
               Create Account
             </a>
             <a
