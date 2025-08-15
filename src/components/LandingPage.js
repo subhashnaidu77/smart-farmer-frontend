@@ -42,6 +42,7 @@ export default function LandingPage() {
           transform: show ? "translateY(0)" : `translateY(${y}px)`,
           opacity: show ? 1 : 0,
           transition: `all 650ms cubic-bezier(.2,.7,.2,1) ${delay}ms`,
+          willChange: "transform, opacity",
         }}
       >
         {children}
@@ -86,8 +87,16 @@ export default function LandingPage() {
     risk === "Low" ? "#0B5D3B" : risk === "Medium" ? "#E0A100" : "#D34040";
 
   /* ------------ Styles / utilities ------------ */
-  const container = { maxWidth: 1200, margin: "0 auto", padding: "0 clamp(14px, 3vw, 24px)" };
-  const section = (py = 64) => ({ padding: `${py}px 0` });
+  const container = {
+    width: "100%",
+    maxWidth: "min(1200px, 100%)",
+    margin: "0 auto",
+    padding: "0 clamp(14px, 4vw, 28px)",
+    boxSizing: "border-box",
+  };
+
+  const section = (py = "clamp(36px, 6vw, 80px)") => ({ padding: `${py} 0` });
+
   const btn = {
     background: BRAND.g,
     color: BRAND.white,
@@ -151,9 +160,18 @@ export default function LandingPage() {
           "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
         color: BRAND.text,
         background: "#FBFFFD",
+        minHeight: "100%",
       }}
     >
       <style>{`
+        /* --- Global reset for full-screen fit & predictable sizing --- */
+        html, body, #root { height: 100%; width: 100%; }
+        html, body { margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; }
+        img { max-width: 100%; height: auto; display: block; }
+        /* Allow the page to use the full safe-area on iOS */
+        body { padding-left: env(safe-area-inset-left, 0); padding-right: env(safe-area-inset-right, 0); }
+
         /* Fluid type — text never overflows narrow screens */
         .hero-title { font-size: clamp(26px, 4.2vw, 46px); line-height: 1.1; }
         .hero-lead  { font-size: clamp(14px, 1.8vw, 18px); }
@@ -187,6 +205,15 @@ export default function LandingPage() {
 
         /* Respect safe areas on iOS for sticky bar */
         .safe-bottom { padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+
+        /* Full device height helper for HERO:
+           use 100dvh where supported, fall back to 100vh otherwise */
+        .hero-minh {
+          min-height: 100vh;
+        }
+        @supports (height: 100dvh) {
+          .hero-minh { min-height: 100dvh; }
+        }
       `}</style>
 
       {/* Top strip */}
@@ -217,7 +244,7 @@ export default function LandingPage() {
         <div
           style={{
             ...container,
-            height: 66,
+            height: "clamp(56px, 7vw, 66px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -292,14 +319,16 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* HERO */}
+      {/* HERO (fills device screen) */}
       <section
+        className="hero-minh"
         style={{
           position: "relative",
-          minHeight: 520,
           display: "grid",
           alignItems: "center",
           overflow: "hidden",
+          width: "100%",
+          /* allow hero to always use full width/height without side gaps */
         }}
       >
         <img
@@ -313,6 +342,7 @@ export default function LandingPage() {
             height: "100%",
             objectFit: "cover",
             filter: "saturate(105%) brightness(.98)",
+            transform: "translateZ(0)",
           }}
         />
         <div
@@ -343,7 +373,8 @@ export default function LandingPage() {
                 <span>Weeks or Months</span>
               </div>
               <h1 className="hero-title" style={{ margin: "12px 0 8px" }}>
-                Finance real farm inputs. <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
+                Finance real farm inputs.{" "}
+                <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
               </h1>
               <p className="hero-lead" style={{ maxWidth: 700, color: BRAND.muted }}>
                 Choose your amount, risk level, holding months and expected percent return.
@@ -362,7 +393,7 @@ export default function LandingPage() {
       {/* VALUE STRIP */}
       <section
         style={{
-          ...section(28),
+          ...section("clamp(20px, 4vw, 36px)"),
           background: BRAND.mint2,
           borderTop: `1px solid ${BRAND.line}`,
           borderBottom: `1px solid ${BRAND.line}`,
@@ -393,7 +424,7 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" style={section(56)}>
+      <section id="how" style={section()}>
         <div className="grid2" style={{ ...container }}>
           <Reveal>
             <div style={{ ...card, padding: 22 }}>
@@ -427,7 +458,7 @@ export default function LandingPage() {
       </section>
 
       {/* ESTIMATOR */}
-      <section id="estimator" style={section(50)}>
+      <section id="estimator" style={section()}>
         <div className="grid2" style={{ ...container }}>
           <Reveal>
             <div style={{ ...card, padding: 18 }}>
@@ -520,7 +551,7 @@ export default function LandingPage() {
       </section>
 
       {/* GALLERY — auto-fit tiles */}
-      <section style={section(26)}>
+      <section style={section("clamp(16px, 3vw, 36px)")}>
         <div style={{ ...container }} className="auto-tiles">
           {[ASSET.tile1, ASSET.tile2, ASSET.tile3].map((src, i) => (
             <Reveal key={src} delay={i * 60}>
@@ -537,7 +568,7 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={section(28)}>
+      <section id="faq" style={section("clamp(20px, 4vw, 36px)")}>
         <div style={{ ...container }}>
           <h3 style={{ textAlign: "center", marginTop: 0 }}>Frequently Asked</h3>
           <div className="auto-tiles" style={{ marginTop: 10 }}>
@@ -580,23 +611,9 @@ export default function LandingPage() {
             <div>Invest in real agricultural materials and earn predictable returns.</div>
           </div>
 
-          <div>
-            <div style={{ fontWeight: 800, marginBottom: 8 }}>Get Started</div>
-            <FLink href="#estimator">Try Estimator</FLink>
-            <FLink href="/login">Open App</FLink>
-            <FLink href="/signup">Create Account</FLink>
-          </div>
-
-          <div>
-            <div style={{ fontWeight: 800, marginBottom: 8 }}>Company</div>
-            <FLink href="/privacy">Privacy</FLink>
-            <FLink href="/terms">Terms</FLink>
-          </div>
-        </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,.14)" }}>
           <div style={{ ...container, display: "flex", justifyContent: "space-between", padding: "10px 0", color: "#bfe6da", gap: 10, flexWrap: "wrap" }}>
             <span>© {new Date().getFullYear()} SmartFarmer</span>
-            <span>Built for clarity across devices</span>
           </div>
         </div>
       </footer>
@@ -632,6 +649,7 @@ function KV({ k, v }) {
     </div>
   );
 }
+
 const FLink = ({ href, children }) => (
   <div style={{ marginBottom: 6 }}>
     <a href={href} style={{ color: "#cfe9e1", textDecoration: "none" }}>{children}</a>
