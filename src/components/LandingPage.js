@@ -382,8 +382,10 @@ export default function LandingPage() {
               </p>
               <div className="stack-sm">
                 <a href="#estimator" className="btn-full" style={btn}>Try the Estimator</a>
+{/*
                 <a href="/signup" className="btn-full" style={ghost}>Create Account</a>
                 <a href="/login" className="btn-full" style={{ ...ghost, background: BRAND.white }}>Login</a>
+  */}
               </div>
             </div>
           </Reveal>
@@ -435,18 +437,20 @@ export default function LandingPage() {
                 >
                   SF
                 </div>
-                <h3 style={{ margin: 0 }}>How SmartFarmer Works</h3>
+                <h3 style={{ margin: 0 , color: BRAND.g }}>How SmartFarmer Works</h3>
               </div>
               <ul style={{ marginTop: 8, paddingLeft: 18, color: BRAND.muted, lineHeight: 1.75 }}>
-                <li>Set your <b>Price</b>, <b>Months</b>, and expected <b>Percent Return</b>.</li>
+                <li>Set your <b>Price</b>, <b>Days</b>, and expected <b>Percent Return</b>.</li>
                 <li>Pick a <b>Risk Level</b> matching your preference.</li>
                 <li>Funds are released as verified <b>inputs</b> to vetted farmers.</li>
                 <li>Track progress in the app; at maturity, receive principal plus ROI.</li>
               </ul>
+{/*
               <div className="stack-sm">
                 <a href="/login" className="btn-full" style={ghost}>Open the App</a>
                 <a href="/signup" className="btn-full" style={btn}>Create Account</a>
               </div>
+              */}
             </div>
           </Reveal>
           <Reveal delay={120}>
@@ -504,20 +508,22 @@ export default function LandingPage() {
                 ))}
               </div>
 
+{/*
               <div className="stack-sm" style={{ marginTop: 12 }}>
                 <a href="/signup" className="btn-full" style={btn}>Create Account</a>
                 <a href="/login" className="btn-full" style={{ ...ghost, background: BRAND.white }}>Login</a>
               </div>
+              */}
             </div>
           </Reveal>
 
           <Reveal delay={120}>
             <div style={{ ...card, padding: 18 }}>
-              <h3 style={{ marginTop: 0 }}>Your Projection</h3>
+              <h3 style={{ marginTop: 0, color: BRAND.g  }}>Your Projection</h3>
               <KV k="Principal" v={fmt(calc.p)} />
-              <KV k="Projected ROI" v={`${fmt(calc.roi)}  (${calc.perMonth.toFixed(2)}% per month)`} />
+              <KV k="Projected ROI" v={`${fmt(calc.roi)}  (${calc.perMonth.toFixed(2)}%)`} />
               <KV k="Total at Maturity" v={fmt(calc.total)} />
-              <KV k="Duration" v={`${calc.m} month${calc.m > 1 ? "s" : ""}`} />
+              <KV k="Duration" v={`${calc.m} day${calc.m > 1 ? "s" : ""}`} />
 
               <div
                 style={{
@@ -541,7 +547,7 @@ export default function LandingPage() {
               <div style={{ marginTop: 12, background: BRAND.mint2, border: `1px solid ${BRAND.line}`, borderRadius: 12, padding: 12, color: BRAND.muted }}>
                 <b>Notes</b>
                 <ul style={{ margin: 6, paddingLeft: 18 }}>
-                  <li>Percent return is for the <b>whole period</b>, not per month.</li>
+                  <li>Percent return is for the <b>whole period</b>, not per day.</li>
                   <li>Risk affects selection and coverage, not the math above.</li>
                 </ul>
               </div>
