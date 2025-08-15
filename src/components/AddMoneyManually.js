@@ -14,7 +14,7 @@ function AddMoneyManually() {
     const currentUser = auth.currentUser;
 const { showModal } = useModal(); // Get the showModal function
     const companyAccounts = [
-        { bankName: "Vfd Bank", accountNumber: "1040594549", accountName: "Smart Farmer" },
+        { bankName: "Wema Bank", accountNumber: "7170013870", accountName: "Smart Farmer" },
         { bankName: "Kolomoni", accountNumber: "0990028382", accountName: "Smart Farmer" }
     ];
 
