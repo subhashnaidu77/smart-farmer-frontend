@@ -13,7 +13,7 @@ export default function LandingPage() {
     shadow: "0 12px 40px rgba(11,93,59,.16)",
   };
 
-  /* ---------------- Assets (public/assets/*) ---------------- */
+  /* ------------ Assets (public/assets/*) ------------ */
   const ASSET = {
     logo: "/assets/logo-dark-theme.png",
     hero: "/assets/hero.jpg",
@@ -23,14 +23,14 @@ export default function LandingPage() {
     tile3: "/assets/tile3.jpg",
   };
 
-  /* ---------------- Simple reveal ---------------- */
+  /* ------------ Reveal helper ------------ */
   const Reveal = ({ children, delay = 0, y = 16 }) => {
     const ref = useRef(null);
     const [show, setShow] = useState(false);
     useEffect(() => {
       const io = new IntersectionObserver(
         (entries) => entries.forEach((e) => e.isIntersecting && setShow(true)),
-        { threshold: 0.14 }
+        { threshold: 0.1 }
       );
       if (ref.current) io.observe(ref.current);
       return () => io.disconnect();
@@ -49,11 +49,13 @@ export default function LandingPage() {
     );
   };
 
-  // disable parallax for small screens to avoid layout shift
+  /* ------------ Gentle parallax (disabled on phones / reduced motion) ------------ */
   const heroImg = useRef(null);
   useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const onScroll = () => {
-      if (!heroImg.current || window.innerWidth < 680) return;
+      if (!heroImg.current) return;
+      if (window.innerWidth < 700 || reduce) return;
       const y = window.scrollY * 0.14;
       heroImg.current.style.transform = `scale(1.04) translateY(${y * 0.16}px)`;
     };
@@ -61,7 +63,7 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ---------------- Estimator ---------------- */
+  /* ------------ Estimator ------------ */
   const [price, setPrice] = useState(500000);
   const [months, setMonths] = useState(6);
   const [pct, setPct] = useState(15);
@@ -83,8 +85,8 @@ export default function LandingPage() {
   const riskColor =
     risk === "Low" ? "#0B5D3B" : risk === "Medium" ? "#E0A100" : "#D34040";
 
-  /* ---------------- Styles ---------------- */
-  const container = { maxWidth: 1200, margin: "0 auto", padding: "0 20px" };
+  /* ------------ Styles / utilities ------------ */
+  const container = { maxWidth: 1200, margin: "0 auto", padding: "0 clamp(14px, 3vw, 24px)" };
   const section = (py = 64) => ({ padding: `${py}px 0` });
   const btn = {
     background: BRAND.g,
@@ -152,23 +154,39 @@ export default function LandingPage() {
       }}
     >
       <style>{`
-        /* Fluid type so headings never overflow */
+        /* Fluid type — text never overflows narrow screens */
         .hero-title { font-size: clamp(26px, 4.2vw, 46px); line-height: 1.1; }
         .hero-lead  { font-size: clamp(14px, 1.8vw, 18px); }
 
-        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        /* Responsive grids */
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 2vw, 20px); }
         @media (max-width: 1024px) { .grid2 { grid-template-columns: 1fr; } }
 
+        .auto-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(12px, 2vw, 16px); }
+
+        /* Stack utilities and full-width buttons on phones */
         .stack-sm { display: flex; gap: 12px; flex-wrap: wrap; }
-        @media (max-width: 680px) {
+        @media (max-width: 700px) {
           .stack-sm { flex-direction: column; }
           .btn-full { width: 100%; text-align: center; }
         }
 
+        /* Show/Hide helpers */
+        .sm-only { display: none; }
+        .md-up { display: block; }
+        @media (max-width: 700px) {
+          .sm-only { display: block; }
+          .md-up { display: none; }
+        }
+
+        /* Visual polish */
         .blur-nav { backdrop-filter: saturate(140%) blur(8px); }
         .link { position:relative; text-decoration:none; }
         .link:after { content:""; position:absolute; left:0; right:100%; bottom:-3px; height:2px; background:${BRAND.g}; transition:right .25s ease; }
         .link:hover:after { right:0; }
+
+        /* Respect safe areas on iOS for sticky bar */
+        .safe-bottom { padding-bottom: max(14px, env(safe-area-inset-bottom)); }
       `}</style>
 
       {/* Top strip */}
@@ -194,6 +212,7 @@ export default function LandingPage() {
           borderBottom: `1px solid ${BRAND.line}`,
         }}
         className="blur-nav"
+        aria-label="Site navigation"
       >
         <div
           style={{
@@ -240,7 +259,7 @@ export default function LandingPage() {
               SmartFarmer
             </div>
           </a>
-          <nav className="stack-sm">
+          <nav className="stack-sm" aria-label="Primary">
             <a className="link" href="#how" style={{ color: BRAND.muted, fontWeight: 700 }}>
               How it Works
             </a>
@@ -301,7 +320,7 @@ export default function LandingPage() {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.94))",
+              "linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.95))",
           }}
         />
         <div style={{ ...container, position: "relative" }}>
@@ -326,20 +345,14 @@ export default function LandingPage() {
               <h1 className="hero-title" style={{ margin: "12px 0 8px" }}>
                 Finance real farm inputs. <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
               </h1>
-              <p className="hero-lead" style={{ maxWidth: 680, color: BRAND.muted }}>
+              <p className="hero-lead" style={{ maxWidth: 700, color: BRAND.muted }}>
                 Choose your amount, risk level, holding months and expected percent return.
                 See your projected ROI instantly, then continue on SmartFarmer.
               </p>
               <div className="stack-sm">
-                <a href="#estimator" className="btn-full" style={btn}>
-                  Try the Estimator
-                </a>
-                <a href="/signup" className="btn-full" style={ghost}>
-                  Create Account
-                </a>
-                <a href="/login" className="btn-full" style={{ ...ghost, background: BRAND.white }}>
-                  Login
-                </a>
+                <a href="#estimator" className="btn-full" style={btn}>Try the Estimator</a>
+                <a href="/signup" className="btn-full" style={ghost}>Create Account</a>
+                <a href="/login" className="btn-full" style={{ ...ghost, background: BRAND.white }}>Login</a>
               </div>
             </div>
           </Reveal>
@@ -355,14 +368,7 @@ export default function LandingPage() {
           borderBottom: `1px solid ${BRAND.line}`,
         }}
       >
-        <div
-          style={{
-            ...container,
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
-            gap: 16,
-          }}
-        >
+        <div style={{ ...container }} className="auto-tiles">
           {[
             { i: "📦", t: "Asset backed", d: "Funds buy audited farm materials." },
             { i: "⏳", t: "Transparent cycles", d: "Hold for weeks or months." },
@@ -393,16 +399,7 @@ export default function LandingPage() {
             <div style={{ ...card, padding: 22 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 8,
-                    background: BRAND.g,
-                    color: "#fff",
-                    display: "grid",
-                    placeItems: "center",
-                    fontWeight: 900,
-                  }}
+                  style={{ width: 28, height: 28, borderRadius: 8, background: BRAND.g, color: "#fff", display: "grid", placeItems: "center", fontWeight: 900 }}
                   aria-hidden
                 >
                   SF
@@ -423,7 +420,7 @@ export default function LandingPage() {
           </Reveal>
           <Reveal delay={120}>
             <div style={{ ...card, overflow: "hidden" }}>
-              <img src={ASSET.how} alt="Farmers and inputs" style={{ width: "100%", height: 340, objectFit: "cover" }} />
+              <img src={ASSET.how} alt="Farmers and inputs" style={{ width: "100%", height: "min(46vw, 340px)", objectFit: "cover" }} />
             </div>
           </Reveal>
         </div>
@@ -435,12 +432,7 @@ export default function LandingPage() {
           <Reveal>
             <div style={{ ...card, padding: 18 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div
-                  style={{ width: 28, height: 28, borderRadius: 8, background: BRAND.g, color: "#fff", display: "grid", placeItems: "center", fontWeight: 900 }}
-                  aria-hidden
-                >
-                  ₦
-                </div>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: BRAND.g, color: "#fff", display: "grid", placeItems: "center", fontWeight: 900 }} aria-hidden>₦</div>
                 <h3 style={{ margin: 0 }}>Quick Return Estimator</h3>
               </div>
 
@@ -527,20 +519,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* GALLERY */}
+      {/* GALLERY — auto-fit tiles */}
       <section style={section(26)}>
-        <div
-          style={{
-            ...container,
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
-            gap: 14,
-          }}
-        >
+        <div style={{ ...container }} className="auto-tiles">
           {[ASSET.tile1, ASSET.tile2, ASSET.tile3].map((src, i) => (
             <Reveal key={src} delay={i * 60}>
               <div style={{ ...card, overflow: "hidden" }}>
-                <img src={src} alt={`SmartFarmer image ${i + 1}`} style={{ width: "100%", height: 190, objectFit: "cover", display: "block" }} />
+                <img
+                  src={src}
+                  alt={`SmartFarmer image ${i + 1}`}
+                  style={{ width: "100%", height: "min(42vw, 200px)", objectFit: "cover", display: "block" }}
+                />
               </div>
             </Reveal>
           ))}
@@ -551,7 +540,7 @@ export default function LandingPage() {
       <section id="faq" style={section(28)}>
         <div style={{ ...container }}>
           <h3 style={{ textAlign: "center", marginTop: 0 }}>Frequently Asked</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginTop: 10 }}>
+          <div className="auto-tiles" style={{ marginTop: 10 }}>
             <div style={{ ...card, padding: 16 }}>
               <b>Are funds buying real inputs</b>
               <div style={{ color: BRAND.muted, marginTop: 6 }}>
@@ -612,12 +601,21 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Sticky mobile CTA */}
+      {/* Sticky mobile CTA (phones only) */}
       {showSticky && (
-        <div style={{ position: "fixed", left: 12, right: 12, bottom: 14, zIndex: 20, display: "none" }} className="show-sm">
+        <div
+          className="sm-only safe-bottom"
+          style={{
+            position: "fixed",
+            left: 12,
+            right: 12,
+            bottom: 12,
+            zIndex: 20,
+          }}
+        >
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            <a href="/signup" className="btn-full" style={{ ...btn, textAlign: "center" }}>Create Account</a>
-            <a href="/login" className="btn-full" style={{ ...ghost, textAlign: "center", background: BRAND.white }}>Login</a>
+            <a href="/signup" style={{ ...btn, textAlign: "center" }}>Create Account</a>
+            <a href="/login" style={{ ...ghost, textAlign: "center", background: BRAND.white }}>Login</a>
           </div>
         </div>
       )}
@@ -625,7 +623,7 @@ export default function LandingPage() {
   );
 }
 
-/* ---------------- tiny atoms ---------------- */
+/* ------------ atoms ------------ */
 function KV({ k, v }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 14px", borderRadius: 12, border: "1px solid #E6EEE9", background: "#fff", marginTop: 8, fontSize: 15 }}>
