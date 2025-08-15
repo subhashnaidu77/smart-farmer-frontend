@@ -370,14 +370,14 @@ export default function LandingPage() {
               >
                 <span>Invest by Units</span>
                 <span aria-hidden>•</span>
-                <span>Weeks or Months</span>
+                <span>Days</span>
               </div>
               <h1 className="hero-title" style={{ margin: "12px 0 8px", color: BRAND.g }}>
                 Finance real farm inputs.{" "}
                 <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
               </h1>
               <p className="hero-lead" style={{ maxWidth: 700, color: BRAND.muted }}>
-                Choose your amount, risk level, holding months and expected percent return.
+                Choose your amount, risk level, holding days and expected percent return.
                 See your projected ROI instantly, then continue on SmartFarmer.
               </p>
               <div className="stack-sm">
@@ -472,7 +472,7 @@ export default function LandingPage() {
 
               <div className="grid2" style={{ gap: 12 }}>
                 <div>
-                  <label style={label}>Months</label>
+                  <label style={label}>Days</label>
                   <input type="number" min={1} value={months} onChange={(e) => setMonths(e.target.value)} style={input} placeholder="6" inputMode="numeric" />
                 </div>
                 <div>
