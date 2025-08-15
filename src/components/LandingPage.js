@@ -372,7 +372,7 @@ export default function LandingPage() {
                 <span aria-hidden>•</span>
                 <span>Weeks or Months</span>
               </div>
-              <h1 className="hero-title" style={{ margin: "12px 0 8px" }}>
+              <h1 className="hero-title" style={{ margin: "12px 0 8px", color: BRAND.g }}>
                 Finance real farm inputs.{" "}
                 <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
               </h1>
@@ -638,7 +638,6 @@ export default function LandingPage() {
       }}
     >
       <span>© {new Date().getFullYear()} SmartFarmer</span>
-      <span>Built for clarity across devices</span>
     </div>
   </div>
 </footer>
