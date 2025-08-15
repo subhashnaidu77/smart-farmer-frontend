@@ -617,16 +617,11 @@ export default function LandingPage() {
     </div>
 
     <div>
-      // <div style={{ fontWeight: 800, marginBottom: 8 }}>Get Started</div>
-      // <FLink href="#estimator">Try Estimator</FLink>
-      // <FLink href="/login">Open App</FLink>
-      // <FLink href="/signup">Create Account</FLink>
+
     </div>
 
     <div>
-      // <div style={{ fontWeight: 800, marginBottom: 8 }}>Company</div>
-      // <FLink href="/privacy">Privacy</FLink>
-      // <FLink href="/terms">Terms</FLink>
+   
     </div>
   </div> {/* <-- this closing tag was missing */}
 
