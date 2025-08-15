@@ -595,28 +595,58 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: BRAND.g2, color: "#d9efe6" }}>
-        <div
-          className="grid2"
-          style={{
-            ...container,
-            display: "grid",
-            gap: 22,
-            gridTemplateColumns: "1.2fr 1fr 1fr",
-            padding: "38px 0",
-          }}
-        >
-          <div>
-            <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 10 }}>SmartFarmer</div>
-            <div>Invest in real agricultural materials and earn predictable returns.</div>
-          </div>
+     {/* FOOTER */}
+<footer style={{ background: BRAND.g2, color: "#d9efe6" }}>
+  <div
+    className="grid2"
+    style={{
+      ...container,
+      display: "grid",
+      gap: 22,
+      gridTemplateColumns: "1.2fr 1fr 1fr",
+      padding: "38px 0",
+    }}
+  >
+    <div>
+      <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 10 }}>
+        SmartFarmer
+      </div>
+      <div>
+        Invest in real agricultural materials and earn predictable returns.
+      </div>
+    </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,.14)" }}>
-          <div style={{ ...container, display: "flex", justifyContent: "space-between", padding: "10px 0", color: "#bfe6da", gap: 10, flexWrap: "wrap" }}>
-            <span>© {new Date().getFullYear()} SmartFarmer</span>
-          </div>
-        </div>
-      </footer>
+    <div>
+      // <div style={{ fontWeight: 800, marginBottom: 8 }}>Get Started</div>
+      // <FLink href="#estimator">Try Estimator</FLink>
+      // <FLink href="/login">Open App</FLink>
+      // <FLink href="/signup">Create Account</FLink>
+    </div>
+
+    <div>
+      // <div style={{ fontWeight: 800, marginBottom: 8 }}>Company</div>
+      // <FLink href="/privacy">Privacy</FLink>
+      // <FLink href="/terms">Terms</FLink>
+    </div>
+  </div> {/* <-- this closing tag was missing */}
+
+  <div style={{ borderTop: "1px solid rgba(255,255,255,.14)" }}>
+    <div
+      style={{
+        ...container,
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "10px 0",
+        color: "#bfe6da",
+        gap: 10,
+        flexWrap: "wrap",
+      }}
+    >
+      <span>© {new Date().getFullYear()} SmartFarmer</span>
+      <span>Built for clarity across devices</span>
+    </div>
+  </div>
+</footer>
 
       {/* Sticky mobile CTA (phones only) */}
       {showSticky && (
