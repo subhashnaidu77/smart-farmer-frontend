@@ -94,7 +94,7 @@ function Dashboard({ handleLogout, userData }) {
                     </div>
                     <div style={{display: 'flex', gap: '10px'}}>
                      <Link to="/add-money" className="btn btn-primary">
-                            <FiPlusCircle /> Add Money Manually
+                            <FiPlusCircle /> Fund Wallet
                         </Link>
 {/* <button onClick={handleAddMoney} className="btn btn-primary"><FiPlusCircle /> Add Money with Velvpay</button> */}
              
