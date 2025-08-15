@@ -7,7 +7,7 @@ export default function LandingPage() {
     mint: "#E9F7F1",
     mint2: "#F5FBF8",
     text: "#0d1b16",
-    muted: "#5B6B66",
+    muted: "#30423D",
     line: "#E6EEE9",
     white: "#ffffff",
     shadow: "0 12px 40px rgba(11,93,59,.16)",
@@ -15,12 +15,12 @@ export default function LandingPage() {
 
   /* ---------------- Assets (public/assets/smartfarmer/*) ---------------- */
   const ASSET = {
-    logo: "/assets/smartfarmer/logo-light-theme.png",
+    logo: "/assets/smartfarmer/logo-dark-theme.png",
     hero: "/assets/smartfarmer/hero.jpg",
     how: "/assets/smartfarmer/how.jpg",
-    t1: "/assets/smartfarmer/tile-1.jpg",
-    t2: "/assets/smartfarmer/tile-2.jpg",
-    t3: "/assets/smartfarmer/tile-3.jpg",
+    tile1: "/assets/smartfarmer/tile1.jpg",
+    tile2: "/assets/smartfarmer/tile2.jpg",
+    tile3: "/assets/smartfarmer/tile3.jpg",
   };
 
   /* ---------------- Animation Helpers ---------------- */
@@ -50,13 +50,14 @@ export default function LandingPage() {
     );
   };
 
-  // subtle parallax on hero media
+  // subtle parallax on hero media (disabled for very small screens)
   const heroImg = useRef(null);
   useEffect(() => {
     const onScroll = () => {
       if (!heroImg.current) return;
+      if (window.innerWidth < 480) return; // avoid jank on small phones
       const y = window.scrollY * 0.16;
-      heroImg.current.style.transform = `scale(1.06) translateY(${y * 0.18}px)`;
+      heroImg.current.style.transform = `scale(1.05) translateY(${y * 0.16}px)`;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -79,14 +80,13 @@ export default function LandingPage() {
   }, [price, months, pct]);
 
   const fmt = (n) =>
-    "₦" +
-    (Number(n) || 0).toLocaleString("en-NG", { maximumFractionDigits: 2 });
+    "₦" + (Number(n) || 0).toLocaleString("en-NG", { maximumFractionDigits: 2 });
 
   const riskColor =
     risk === "Low" ? "#0B5D3B" : risk === "Medium" ? "#E0A100" : "#D34040";
 
   /* ---------------- Styles ---------------- */
-  const container = { maxWidth: 1200, margin: "0 auto", padding: "0 22px" };
+  const container = { maxWidth: 1200, margin: "0 auto", padding: "0 20px" };
   const section = (py = 64) => ({ padding: `${py}px 0` });
   const btn = {
     background: BRAND.g,
@@ -99,6 +99,7 @@ export default function LandingPage() {
     display: "inline-block",
     transition: "transform .22s ease, box-shadow .22s ease, filter .22s ease",
     boxShadow: BRAND.shadow,
+    lineHeight: 1.1,
   };
   const btnGhost = {
     background: BRAND.mint,
@@ -109,6 +110,7 @@ export default function LandingPage() {
     fontWeight: 800,
     textDecoration: "none",
     display: "inline-block",
+    lineHeight: 1.1,
   };
   const card = {
     background: BRAND.white,
@@ -127,23 +129,23 @@ export default function LandingPage() {
     borderRadius: 12,
     border: `1px solid ${BRAND.line}`,
     outline: "none",
-    fontSize: 14,
+    fontSize: 16,
     boxSizing: "border-box",
     background: BRAND.white,
   };
   const label = {
     display: "block",
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 900,
     color: BRAND.muted,
     marginTop: 10,
     marginBottom: 6,
   };
 
-  // sticky mobile CTA visibility
+  // sticky mobile CTA visibility (show on small screens)
   const [showSticky, setShowSticky] = useState(false);
   useEffect(() => {
-    const onScroll = () => setShowSticky(window.scrollY > 480);
+    const onScroll = () => setShowSticky(window.scrollY > 420);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -157,14 +159,34 @@ export default function LandingPage() {
         background: "#FBFFFD",
       }}
     >
+      {/* Responsive helpers */}
       <style>{`
-        @media (max-width: 980px) {
+        /* Base fluid typographic scale */
+        h1, h2, h3 { line-height: 1.15; margin: 0 0 10px; }
+        p { line-height: 1.6; }
+
+        /* Tablet and down */
+        @media (max-width: 1024px) {
           .grid2 { grid-template-columns: 1fr !important; }
-          .hero-title { font-size: 36px !important; }
-          .hero-cta { flex-direction: column !important; align-items: flex-start !important; }
-          .hide-sm { display:none !important; }
+          .hero-title { font-size: 38px !important; }
+          .hero-cta { flex-direction: row; flex-wrap: wrap; }
         }
+
+        /* Phones */
+        @media (max-width: 640px) {
+          .grid2 { grid-template-columns: 1fr !important; }
+          .hero-title { font-size: 32px !important; }
+          .hero-lead { font-size: 15px !important; }
+          .stack-sm { flex-direction: column !important; align-items: stretch !important; }
+          .pad-sm { padding: 14px !important; }
+          .hero-min { min-height: 440px !important; }
+          .show-sm { display: block !important; }
+        }
+
+        /* Blur nav */
         .blur-nav { backdrop-filter: saturate(140%) blur(8px); }
+
+        /* Animated link underline */
         .link { position:relative; text-decoration:none; }
         .link:after { content:""; position:absolute; left:0; right:100%; bottom:-3px; height:2px; background:${BRAND.g}; transition:right .25s ease; }
         .link:hover:after { right:0; }
@@ -174,13 +196,13 @@ export default function LandingPage() {
       <div
         style={{
           background: BRAND.g2,
-          color: "#cfe9e1",
+          color: "#d9efe6",
           fontSize: 12,
           textAlign: "center",
-          padding: "6px 10px",
+          padding: "7px 10px",
         }}
       >
-        Input‑backed yield for everyone. smartfarmer.ng
+        Input backed yield for everyone · smartfarmer.ng
       </div>
 
       {/* NAV */}
@@ -189,7 +211,7 @@ export default function LandingPage() {
           position: "sticky",
           top: 0,
           zIndex: 10,
-          background: "rgba(255,255,255,.86)",
+          background: "rgba(255,255,255,.9)",
           borderBottom: `1px solid ${BRAND.line}`,
         }}
         className="blur-nav"
@@ -201,6 +223,7 @@ export default function LandingPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 12,
           }}
         >
           <a
@@ -222,19 +245,29 @@ export default function LandingPage() {
                 display: "grid",
                 placeItems: "center",
                 boxShadow: BRAND.shadow,
+                overflow: "hidden",
               }}
+              aria-label="SmartFarmer"
             >
               <img
                 src={ASSET.logo}
-                alt="Smart Farmer"
-                style={{ width: 22, height: 22 }}
+                alt="SmartFarmer logo"
+                style={{ width: 24, height: 24, objectFit: "contain" }}
               />
             </div>
             <div style={{ fontWeight: 900, letterSpacing: 0.3 }}>
               SmartFarmer
             </div>
           </a>
-          <nav style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <nav
+            style={{
+              display: "flex",
+              gap: 16,
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+            className="stack-sm"
+          >
             <a
               className="link"
               href="#how"
@@ -285,6 +318,7 @@ export default function LandingPage() {
 
       {/* HERO */}
       <section
+        className="hero-min"
         style={{
           position: "relative",
           minHeight: 520,
@@ -296,22 +330,23 @@ export default function LandingPage() {
         <img
           ref={heroImg}
           src={ASSET.hero}
-          alt="Smart Farmer hero"
+          alt="SmartFarmer field"
           style={{
             position: "absolute",
             inset: 0,
             width: "100%",
-            height: "115%",
+            height: "100%",
             objectFit: "cover",
-            filter: "saturate(105%) brightness(.96)",
+            filter: "saturate(105%) brightness(0.98)",
           }}
         />
+        {/* Softer overlay so images are visible while text remains readable */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(180deg, rgba(255,255,255,.90), rgba(255,255,255,.96))",
+              "linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.92))",
           }}
         />
         <div style={{ ...container, position: "relative" }}>
@@ -338,17 +373,14 @@ export default function LandingPage() {
                 style={{ fontSize: 46, lineHeight: 1.08, margin: "12px 0 8px" }}
               >
                 Finance real farm inputs.{" "}
-                <span style={{ color: BRAND.g }}>
-                  Earn predictable returns.
-                </span>
+                <span style={{ color: BRAND.g }}>Earn predictable returns.</span>
               </h1>
-              <p style={{ maxWidth: 560, color: BRAND.muted }}>
-                Choose your amount, risk level, holding months and expected %
-                return. See your projected ROI instantly—then continue on Smart
-                Farmer.
+              <p className="hero-lead" style={{ maxWidth: 640, color: BRAND.muted }}>
+                Choose your amount, risk level, holding months and expected percent
+                return. See your projected ROI instantly, then continue on SmartFarmer.
               </p>
               <div
-                className="hero-cta"
+                className="hero-cta stack-sm"
                 style={{ display: "flex", gap: 12, flexWrap: "wrap" }}
               >
                 <a href="#estimator" style={btn}>
@@ -387,21 +419,9 @@ export default function LandingPage() {
           }}
         >
           {[
-            {
-              i: "📦",
-              t: "Asset‑backed",
-              d: "Funds buy audited farm materials.",
-            },
-            {
-              i: "⏳",
-              t: "Transparent cycles",
-              d: "Hold for weeks or months.",
-            },
-            {
-              i: "🛡️",
-              t: "Risk controls",
-              d: "Insurance, KYC, satellite checks.",
-            },
+            { i: "📦", t: "Asset backed", d: "Funds buy audited farm materials." },
+            { i: "⏳", t: "Transparent cycles", d: "Hold for weeks or months." },
+            { i: "🛡️", t: "Risk controls", d: "Insurance, KYC, satellite checks." },
             { i: "🌱", t: "Impact", d: "Boost yields and farmer income." },
           ].map((x, i) => (
             <Reveal key={x.t} delay={i * 90}>
@@ -417,9 +437,11 @@ export default function LandingPage() {
                   })
                 }
               >
-                <div style={{ fontSize: 26 }}>{x.i}</div>
+                <div style={{ fontSize: 28 }} aria-hidden>
+                  {x.i}
+                </div>
                 <div style={{ fontWeight: 900, marginTop: 6 }}>{x.t}</div>
-                <div style={{ color: BRAND.muted, fontSize: 14 }}>{x.d}</div>
+                <div style={{ color: BRAND.muted, fontSize: 15 }}>{x.d}</div>
               </div>
             </Reveal>
           ))}
@@ -438,7 +460,7 @@ export default function LandingPage() {
           }}
         >
           <Reveal>
-            <div style={{ ...card, padding: 22 }}>
+            <div style={{ ...card, padding: 22 }} className="pad-sm">
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <div
                   style={{
@@ -451,6 +473,7 @@ export default function LandingPage() {
                     placeItems: "center",
                     fontWeight: 900,
                   }}
+                  aria-hidden
                 >
                   SF
                 </div>
@@ -461,26 +484,17 @@ export default function LandingPage() {
                   marginTop: 8,
                   paddingLeft: 18,
                   color: BRAND.muted,
-                  lineHeight: 1.7,
+                  lineHeight: 1.75,
                 }}
               >
                 <li>
-                  Set your <b>Price</b>, <b>Months</b>, and expected{" "}
-                  <b>% Return</b>.
+                  Set your <b>Price</b>, <b>Months</b>, and expected <b>Percent Return</b>.
                 </li>
-                <li>
-                  Pick a <b>Risk Level</b> matching your preference.
-                </li>
-                <li>
-                  Funds are released as verified <b>inputs</b> to vetted
-                  farmers.
-                </li>
-                <li>
-                  Track progress in the app; at maturity, receive principal +
-                  ROI.
-                </li>
+                <li>Pick a <b>Risk Level</b> matching your preference.</li>
+                <li>Funds are released as verified <b>inputs</b> to vetted farmers.</li>
+                <li>Track progress in the app; at maturity, receive principal plus ROI.</li>
               </ul>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <div className="stack-sm" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <a href="/login" style={btnGhost}>
                   Open the App
                 </a>
@@ -494,8 +508,8 @@ export default function LandingPage() {
             <div style={{ ...card, overflow: "hidden" }}>
               <img
                 src={ASSET.how}
-                alt="Field"
-                style={{ width: "100%", height: 320, objectFit: "cover" }}
+                alt="Farmers and inputs"
+                style={{ width: "100%", height: 340, objectFit: "cover" }}
               />
             </div>
           </Reveal>
@@ -515,7 +529,7 @@ export default function LandingPage() {
         >
           {/* Form */}
           <Reveal>
-            <div style={{ ...card, padding: 18 }}>
+            <div style={{ ...card, padding: 18 }} className="pad-sm">
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <div
                   style={{
@@ -528,6 +542,7 @@ export default function LandingPage() {
                     placeItems: "center",
                     fontWeight: 900,
                   }}
+                  aria-hidden
                 >
                   ₦
                 </div>
@@ -541,7 +556,8 @@ export default function LandingPage() {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 style={input}
-                placeholder="e.g., 500000"
+                placeholder="500000"
+                inputMode="numeric"
               />
 
               <div
@@ -550,6 +566,7 @@ export default function LandingPage() {
                   gridTemplateColumns: "1fr 1fr",
                   gap: 12,
                 }}
+                className="grid2"
               >
                 <div>
                   <label style={label}>Months</label>
@@ -559,18 +576,20 @@ export default function LandingPage() {
                     value={months}
                     onChange={(e) => setMonths(e.target.value)}
                     style={input}
-                    placeholder="e.g., 6"
+                    placeholder="6"
+                    inputMode="numeric"
                   />
                 </div>
                 <div>
-                  <label style={label}>Percentage Return (%)</label>
+                  <label style={label}>Percent Return</label>
                   <input
                     type="number"
                     min={0}
                     value={pct}
                     onChange={(e) => setPct(e.target.value)}
                     style={input}
-                    placeholder="e.g., 15"
+                    placeholder="15"
+                    inputMode="numeric"
                   />
                 </div>
               </div>
@@ -592,6 +611,7 @@ export default function LandingPage() {
                       fontWeight: 900,
                       cursor: "pointer",
                     }}
+                    aria-pressed={lvl === risk}
                   >
                     {lvl}
                   </button>
@@ -599,12 +619,8 @@ export default function LandingPage() {
               </div>
 
               <div
-                style={{
-                  display: "flex",
-                  gap: 10,
-                  flexWrap: "wrap",
-                  marginTop: 12,
-                }}
+                className="stack-sm"
+                style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 12 }}
               >
                 <a href="/signup" style={btn}>
                   Create Account
@@ -621,12 +637,12 @@ export default function LandingPage() {
 
           {/* Results */}
           <Reveal delay={120}>
-            <div style={{ ...card, padding: 18 }}>
+            <div style={{ ...card, padding: 18 }} className="pad-sm">
               <h3 style={{ marginTop: 0 }}>Your Projection</h3>
               <KV k="Principal" v={fmt(calc.p)} />
               <KV
                 k="Projected ROI"
-                v={`${fmt(calc.roi)}  (${calc.perMonth.toFixed(2)}% / mo)`}
+                v={`${fmt(calc.roi)}  (${calc.perMonth.toFixed(2)}% per month)`}
               />
               <KV k="Total at Maturity" v={fmt(calc.total)} />
               <KV k="Duration" v={`${calc.m} month${calc.m > 1 ? "s" : ""}`} />
@@ -644,6 +660,7 @@ export default function LandingPage() {
                   fontWeight: 800,
                   color: BRAND.g,
                 }}
+                aria-live="polite"
               >
                 <span
                   style={{
@@ -669,10 +686,10 @@ export default function LandingPage() {
                 <b>Notes</b>
                 <ul style={{ margin: 6, paddingLeft: 18 }}>
                   <li>
-                    Percentage is for the <b>whole period</b>, not per month.
+                    Percent return is for the <b>whole period</b>, not per month.
                   </li>
                   <li>
-                    Risk affects selection & coverage, not the math above.
+                    Risk affects selection and coverage, not the math above.
                   </li>
                 </ul>
               </div>
@@ -681,49 +698,39 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section style={{ ...section(36), background: "#F3F5F4" }}>
-        <div style={{ ...container }}>
-          <h3 style={{ textAlign: "center", marginTop: 0 }}>What People Say</h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))",
-              gap: 16,
-              marginTop: 12,
-            }}
-          >
-            {[
-              {
-                q: "Unit‑based funding is so clear. I know exactly what my money buys.",
-                n: "Adewale O.",
-              },
-              {
-                q: "Returns matched the stated cycle. Simple and fair.",
-                n: "Mary K.",
-              },
-              {
-                q: "Love the transparency and the farmer impact.",
-                n: "Luis F.",
-              },
-            ].map((t, i) => (
-              <Reveal key={i} delay={i * 90}>
-                <div style={{ ...card, padding: 16 }}>
-                  <div style={{ fontStyle: "italic" }}>&quot;{t.q}&quot;</div>
-                  <div style={{ marginTop: 8, fontWeight: 900 }}>{t.n}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+      {/* GALLERY STRIP (ensures images are clearly visible and responsive) */}
+      <section style={{ ...section(30) }}>
+        <div
+          style={{
+            ...container,
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
+            gap: 14,
+          }}
+        >
+          {[ASSET.tile1, ASSET.tile2, ASSET.tile3].map((src, i) => (
+            <Reveal key={src} delay={i * 60}>
+              <div style={{ ...card, overflow: "hidden" }}>
+                <img
+                  src={src}
+                  alt={`SmartFarmer image ${i + 1}`}
+                  style={{
+                    width: "100%",
+                    height: 190,
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
       {/* FAQ */}
       <section id="faq" style={section(30)}>
         <div style={{ ...container }}>
-          <h3 style={{ textAlign: "center", marginTop: 0 }}>
-            Frequently Asked
-          </h3>
+          <h3 style={{ textAlign: "center", marginTop: 0 }}>Frequently Asked</h3>
           <div
             style={{
               display: "grid",
@@ -733,24 +740,24 @@ export default function LandingPage() {
             }}
           >
             <div style={{ ...card, padding: 16 }}>
-              <b>Is my money buying real assets?</b>
+              <b>Are funds buying real inputs</b>
               <div style={{ color: BRAND.muted, marginTop: 6 }}>
-                Yes. Funds are disbursed as verified agricultural inputs to
-                vetted farmers and cooperatives.
+                Yes. Funds are disbursed as verified agricultural inputs to vetted
+                farmers and cooperatives.
               </div>
             </div>
             <div style={{ ...card, padding: 16 }}>
-              <b>How do cycles work?</b>
+              <b>How do cycles work</b>
               <div style={{ color: BRAND.muted, marginTop: 6 }}>
-                Pick weeks or months to match crop realities. Payouts occur at
-                the end of the selected cycle.
+                Pick weeks or months to match crop realities. Payouts occur at the
+                end of the selected cycle.
               </div>
             </div>
             <div style={{ ...card, padding: 16 }}>
-              <b>What about risk?</b>
+              <b>How is risk managed</b>
               <div style={{ color: BRAND.muted, marginTop: 6 }}>
-                You can choose Low/Medium/High opportunities. Insurance partners
-                and monitoring help manage risk.
+                Choose Low, Medium or High opportunities. Insurance partners and
+                monitoring help manage risk.
               </div>
             </div>
           </div>
@@ -774,8 +781,7 @@ export default function LandingPage() {
               SmartFarmer
             </div>
             <div>
-              Invest in real agricultural materials and earn predictable
-              returns.
+              Invest in real agricultural materials and earn predictable returns.
             </div>
           </div>
 
@@ -783,6 +789,13 @@ export default function LandingPage() {
             <div style={{ fontWeight: 800, marginBottom: 8 }}>Get Started</div>
             <FLink href="#estimator">Try Estimator</FLink>
             <FLink href="/login">Open App</FLink>
+            <FLink href="/signup">Create Account</FLink>
+          </div>
+
+          <div>
+            <div style={{ fontWeight: 800, marginBottom: 8 }}>Company</div>
+            <FLink href="/privacy">Privacy</FLink>
+            <FLink href="/terms">Terms</FLink>
           </div>
         </div>
         <div style={{ borderTop: "1px solid rgba(255,255,255,.14)" }}>
@@ -793,14 +806,17 @@ export default function LandingPage() {
               justifyContent: "space-between",
               padding: "10px 0",
               color: "#bfe6da",
+              gap: 10,
+              flexWrap: "wrap",
             }}
           >
             <span>© {new Date().getFullYear()} SmartFarmer</span>
+            <span>Built for clarity across devices</span>
           </div>
         </div>
       </footer>
 
-      {/* Sticky mobile CTA */}
+      {/* Sticky mobile CTA (visible only on small screens) */}
       {showSticky && (
         <div
           style={{
@@ -809,8 +825,9 @@ export default function LandingPage() {
             right: 12,
             bottom: 14,
             zIndex: 20,
+            display: "none",
           }}
-          className="hide-sm"
+          className="show-sm"
         >
           <div
             style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}
@@ -843,11 +860,12 @@ function KV({ k, v }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "10px 12px",
+        padding: "12px 14px",
         borderRadius: 12,
         border: "1px solid #E6EEE9",
         background: "#fff",
         marginTop: 8,
+        fontSize: 15,
       }}
     >
       <span style={{ color: "#5B6B66" }}>{k}</span>
