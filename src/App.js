@@ -19,6 +19,7 @@ import PaymentCallback from "./components/PaymentCallback";
 import WithdrawalPage from "./components/WithdrawalPage";
 import LoadingSpinner from "./components/LoadingSpinner"; // Import the new spinner
 import LandingPage from "./components/LandingPage";
+import PasswordReset from "./pages/PasswordReset";
 
 // Import Firebase services
 import { auth, db } from "./firebase";
@@ -95,6 +96,7 @@ function App() {
                   }
                 />
                 <Route path="/invest" element={<InvestPage />} />
+                <Route path="/reset-password" element={<PasswordReset />} />
                 <Route path="/transactions" element={<TransactionsPage />} />
                 <Route
                   path="/withdraw"
