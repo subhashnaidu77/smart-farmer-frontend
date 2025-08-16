@@ -1,62 +1,100 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../firebase";
+import { useTheme } from "../context/ThemeContext";
+import Modal from "../components/Modal";
+import { authErrorToCopy } from "../utils/authErrorCopy";
+import { retryWithBackoff } from "../utils/retry";
 
-function ForgotPassword() {
-    const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+export default function ForgotPassword() {
+  const { theme } = useTheme();
+  const logoSrc = theme === "light" ? "/logo-light-theme.png" : "/logo-dark-theme.png";
+  const navigate = useNavigate();
 
-    const handleReset = async (e) => {
-        e.preventDefault();
-        setError('');
-        setSuccess('');
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-        try {
-            await sendPasswordResetEmail(auth, email);
-            setSuccess('Password reset link has been sent to your email. Please check your inbox.');
-            setEmail('');
-        } catch (err) {
-            if (err.code === 'auth/user-not-found') {
-                setError('No user found with this email address.');
-            } else {
-                setError('Failed to send reset link. Please try again.');
-            }
-            console.error("Password reset error:", err);
-        }
-    };
-    
-    return (
-        <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-            <h2>Reset Password</h2>
-            <p style={{fontSize: '14px', color: '#666', marginBottom: '20px'}}>Enter your registered email address to receive a password reset link.</p>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-            <form onSubmit={handleReset}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        style={{ width: '100%', padding: '8px', border: '1px solid #ddd', borderRadius: '4px', boxSizing: 'border-box' }}
-                    />
-                </div>
-                <button
-                    type="submit"
-                    style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }}
-                >
-                    Send Reset Link
-                </button>
-            </form>
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <Link to="/login">Back to Login</Link>
-            </div>
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("info");
+  const [modalTitle, setModalTitle] = useState();
+  const [modalMsg, setModalMsg] = useState("");
+  const [primaryLabel, setPrimaryLabel] = useState("OK");
+  const [primaryAction, setPrimaryAction] = useState(() => () => setModalOpen(false));
+
+  const openModal = ({ type, title, message, primaryActionLabel = "OK", onPrimaryAction }) => {
+    setModalType(type);
+    setModalTitle(title);
+    setModalMsg(message);
+    setPrimaryLabel(primaryActionLabel);
+    setPrimaryAction(() => onPrimaryAction || (() => setModalOpen(false)));
+    setModalOpen(true);
+  };
+
+  const doSend = async () => {
+    await sendPasswordResetEmail(auth, email.trim());
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      await retryWithBackoff(doSend);
+      openModal({
+        type: "success",
+        title: "Email sent",
+        message: "If an account exists for that address, we’ve sent a reset link. Please check your inbox.",
+        onPrimaryAction: () => {
+          setModalOpen(false);
+          navigate("/login");
+        },
+      });
+    } catch (err) {
+      openModal({
+        type: "error",
+        title: "Reset error",
+        message: authErrorToCopy(err?.code, "We couldn’t send the reset link. Please try again."),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="card" style={{ maxWidth: 450, margin: "50px auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {/* Back to Landing Page */}
+      <button className="btn btn-ghost" style={{ alignSelf: "flex-start", marginBottom: 10 }} onClick={() => navigate("/")}>
+        ← Back to Landing Page
+      </button>
+
+      <img src={logoSrc} alt="Smart Farmer Logo" className="auth-logo" />
+      <h2 style={{ textAlign: "center", marginBottom: 20 }}>Forgot Password</h2>
+
+      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <div className="form-group">
+          <label>Email Address</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
         </div>
-    );
-}
+        <button type="submit" className="btn btn-primary" style={{ width: "100%" }} disabled={loading}>
+          {loading ? "Sending…" : "Send Reset Link"}
+        </button>
+      </form>
 
-export default ForgotPassword;
+      <p style={{ textAlign: "center", marginTop: 20 }}>
+        Remembered your password? <Link to="/login">Back to Login</Link>
+      </p>
+
+      <Modal
+        show={modalOpen}
+        type={modalType}
+        title={modalTitle}
+        message={modalMsg}
+        primaryActionLabel={primaryLabel}
+        onPrimaryAction={primaryAction}
+        onClose={() => setModalOpen(false)}
+      />
+    </div>
+  );
+}
