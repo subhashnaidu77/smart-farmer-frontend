@@ -1,45 +1,76 @@
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
-    width: 100%;
-    max-width: 400px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    animation: fadeIn 0.3s ease-out;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+  border-radius: 16px;
 }
 
 .modal-icon {
-    font-size: 48px;
-    margin-bottom: 20px;
+  font-size: 48px;
+  margin-bottom: 14px;
 }
-.modal-icon.success { color: #28a745; }
-.modal-icon.error { color: #dc3545; }
-.modal-icon.info { color: #007bff; }
+.modal-icon.success { color: #22c55e; }  /* green-500 */
+.modal-icon.error   { color: #ef4444; }  /* red-500 */
+.modal-icon.info    { color: #3b82f6; }  /* blue-500 */
 
 .modal-title {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.5em;
+  margin: 6px 0 8px 0;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .modal-message {
-    margin-top: 0;
-    margin-bottom: 30px;
-    font-size: 1em;
-    color: var(--text-secondary);
+  margin: 0 0 18px 0;
+  font-size: 0.98rem;
+  color: var(--text-secondary, #64748b); /* slate-500 fallback */
+}
+
+.modal-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Buttons (lightweight) */
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary {
+  background: #0ea5e9; /* sky-500 */
+  color: white;
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+}
+
+/* Anim */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
