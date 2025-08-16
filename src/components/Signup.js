@@ -1,5 +1,6 @@
+// src/pages/Signup.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -7,14 +8,17 @@ import { useTheme } from '../context/ThemeContext';
 import Modal from '../components/Modal';
 import { authErrorToCopy } from '../utils/authErrorCopy';
 import { retryWithBackoff } from '../utils/retry';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 export default function Signup() {
   const { theme } = useTheme();
   const logoSrc = theme === 'light' ? '/logo-light-theme.png' : '/logo-dark-theme.png';
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [showPass, setShowPass] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -45,11 +49,6 @@ export default function Signup() {
       createdAt: serverTimestamp(),
       walletBalance: 0,
       role: 'user',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      notificationPrefs: { activity: true, investment: true, promotions: false },
-      withdrawalSettings: { bankName: '', accountNumber: '', accountName: '' },
       referralCode: newReferralCode,
       referredBy: referralCode || null,
     });
@@ -61,60 +60,20 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      if (typeof navigator !== 'undefined' && !navigator.onLine) {
-        // Force a retriable error to enter backoff flow
-        throw { code: 'auth/network-request-failed' };
-      }
-
-      // Retry wrapper for transient network failures
-      await retryWithBackoff(doSignup, {
-        retries: 3,
-        baseMs: 300,
-        maxMs: 1500,
-      });
-
+      await retryWithBackoff(doSignup);
       setEmail('');
       setPassword('');
       setReferralCode('');
-
       openModal({
         type: 'success',
         title: 'Account Created',
         message: 'Registration successful! Your account has been created.',
-        primaryActionLabel: 'Great',
       });
     } catch (err) {
-      console.error('Signup error:', err);
-      const msg = authErrorToCopy(err?.code, 'Error creating your account. Please try again.');
-
-      const isNetwork = err?.code === 'auth/network-request-failed';
       openModal({
         type: 'error',
-        title: 'Sign up error',
-        message: msg,
-        primaryActionLabel: isNetwork ? 'Retry' : 'OK',
-        onPrimaryAction: async () => {
-          setModalOpen(false);
-          if (isNetwork) {
-            try {
-              await retryWithBackoff(doSignup, { retries: 3, baseMs: 300, maxMs: 1500 });
-              openModal({
-                type: 'success',
-                title: 'Account Created',
-                message: 'Registration successful! Your account has been created.',
-                primaryActionLabel: 'Great',
-              });
-            } catch (reErr) {
-              console.error('Retry signup failed:', reErr);
-              openModal({
-                type: 'error',
-                title: 'Still offline?',
-                message: authErrorToCopy(reErr?.code, 'We still could not complete signup. Please check your connection and try again.'),
-                primaryActionLabel: 'OK',
-              });
-            }
-          }
-        },
+        title: 'Signup error',
+        message: authErrorToCopy(err?.code),
       });
     } finally {
       setLoading(false);
@@ -123,6 +82,15 @@ export default function Signup() {
 
   return (
     <div className="card" style={{ maxWidth: '450px', margin: '50px auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Back to Landing Page */}
+      <button
+        className="btn btn-ghost"
+        style={{ alignSelf: 'flex-start', marginBottom: '10px' }}
+        onClick={() => navigate('/')}
+      >
+        ← Back to Landing Page
+      </button>
+
       <img src={logoSrc} alt="Smart Farmer Logo" className="auth-logo" />
       <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Create an Account</h2>
 
@@ -131,13 +99,25 @@ export default function Signup() {
           <label>Email Address</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
         </div>
-        <div className="form-group">
+        <div className="form-group" style={{ position: 'relative' }}>
           <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" />
+          <input
+            type={showPass ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+          />
+          <span
+            style={{ position: 'absolute', right: 10, top: 38, cursor: 'pointer' }}
+            onClick={() => setShowPass(!showPass)}
+          >
+            {showPass ? <FiEyeOff /> : <FiEye />}
+          </span>
         </div>
         <div className="form-group">
           <label>Referral Code (Optional)</label>
-          <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Enter code if you have one" />
+          <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} />
         </div>
         <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
           {loading ? 'Creating…' : 'Sign Up'}
