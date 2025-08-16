@@ -1,32 +1,99 @@
-import React from 'react';
-import { FiCheckCircle, FiXCircle, FiInfo } from 'react-icons/fi';
-import './Modal.css'; // We will create this CSS file next
+import React, { useEffect, useRef } from "react";
+import { FiCheckCircle, FiXCircle, FiInfo } from "react-icons/fi";
+import "./Modal.css";
 
-const icons = {
-    success: <FiCheckCircle />,
-    error: <FiXCircle />,
-    info: <FiInfo />,
+const ICONS = {
+  success: <FiCheckCircle aria-hidden="true" />,
+  error: <FiXCircle aria-hidden="true" />,
+  info: <FiInfo aria-hidden="true" />,
 };
 
-const Modal = ({ show, message, type, onClose }) => {
-    if (!show) {
-        return null;
+export default function Modal({
+  show,
+  type = "info",              // 'success' | 'error' | 'info'
+  title,                       // optional string
+  message,
+  primaryActionLabel = "OK",
+  onPrimaryAction,
+  secondaryActionLabel,        // optional string
+  onSecondaryAction,           // optional fn
+  onClose,                     // fallback close
+  closeOnBackdrop = true,
+  closeOnEsc = true,
+}) {
+  const backdropRef = useRef(null);
+  const primaryBtnRef = useRef(null);
+
+  useEffect(() => {
+    if (!show) return;
+
+    // Focus primary button on open for accessibility
+    const t = setTimeout(() => {
+      primaryBtnRef.current?.focus();
+    }, 10);
+
+    // Close on Esc
+    function handleKey(e) {
+      if (closeOnEsc && e.key === "Escape") {
+        onClose?.();
+      }
     }
+    document.addEventListener("keydown", handleKey);
 
-    return (
-        <div className="modal-backdrop">
-            <div className="modal-content card">
-                <div className={`modal-icon ${type}`}>
-                    {icons[type] || <FiInfo />}
-                </div>
-                <h3 className="modal-title">{type.charAt(0).toUpperCase() + type.slice(1)}</h3>
-                <p className="modal-message">{message}</p>
-                <button className="btn btn-primary" onClick={onClose}>
-                    Close
-                </button>
-            </div>
+    // Prevent body scroll behind modal
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = prev;
+    };
+  }, [show, closeOnEsc, onClose]);
+
+  if (!show) return null;
+
+  const handleBackdrop = (e) => {
+    if (closeOnBackdrop && e.target === backdropRef.current) {
+      onClose?.();
+    }
+  };
+
+  const icon = ICONS[type] ?? ICONS.info;
+  const safeTitle = title ?? (type.charAt(0).toUpperCase() + type.slice(1));
+
+  return (
+    <div
+      ref={backdropRef}
+      className="modal-backdrop"
+      onMouseDown={handleBackdrop}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      aria-describedby="modal-desc"
+    >
+      <div className="modal-content card" role="document">
+        <div className={`modal-icon ${type}`}>{icon}</div>
+        <h3 id="modal-title" className="modal-title">{safeTitle}</h3>
+        <p id="modal-desc" className="modal-message">{message}</p>
+
+        <div className="modal-actions">
+          {secondaryActionLabel && onSecondaryAction && (
+            <button className="btn btn-ghost" onClick={onSecondaryAction}>
+              {secondaryActionLabel}
+            </button>
+          )}
+
+          <button
+            ref={primaryBtnRef}
+            className="btn btn-primary"
+            onClick={onPrimaryAction || onClose}
+            autoFocus
+          >
+            {primaryActionLabel}
+          </button>
         </div>
-    );
-};
-
-export default Modal;
+      </div>
+    </div>
+  );
+}
