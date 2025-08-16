@@ -19,7 +19,7 @@ import PaymentCallback from "./components/PaymentCallback";
 import WithdrawalPage from "./components/WithdrawalPage";
 import LoadingSpinner from "./components/LoadingSpinner"; // Import the new spinner
 import LandingPage from "./components/LandingPage";
-import PasswordReset from "./pages/PasswordReset";
+import PasswordReset from "./components/PasswordReset";
 
 // Import Firebase services
 import { auth, db } from "./firebase";
